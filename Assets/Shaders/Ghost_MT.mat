@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Ghost_Gradient_MT
+  m_Name: Ghost_MT
   m_Shader: {fileID: -6465566751694194690, guid: 8c994648b32b746fa906f654cd2dd68a, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -40,11 +40,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_a7682fc079e141e0a71483474788c064: 2.23
-    - Vector1_a8adc52494f041688972296ca6a617f1: 1.33
+    - Vector1_a7682fc079e141e0a71483474788c064: 1.78
+    - Vector1_a8adc52494f041688972296ca6a617f1: 1
     - Vector1_b81966c4eeb94671a7d13edddd437eda: 0
-    - Vector1_b8bced3e0f914350813f17754f95de9a: 0.2
+    - Vector1_b8bced3e0f914350813f17754f95de9a: 0.1
     m_Colors:
-    - Color_0fdad36485e1498694cae5338c68e381: {r: 0, g: 76.93232, b: 102.75575, a: 0}
-    - Color_ea41787909284f7387d774abde153b4a: {r: 311.49716, g: 0, b: 24.463127, a: 0}
+    - Color_0fdad36485e1498694cae5338c68e381: {r: 0, g: 518.02356, b: 766.9961, a: 1}
+    - Color_ea41787909284f7387d774abde153b4a: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
