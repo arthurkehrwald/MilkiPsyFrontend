@@ -13,15 +13,9 @@ public class VertColourOnStart1 : MonoBehaviour
         double currentDistance = 0.0;
         double maxDistance = 0.0;
         
-
         // create new colors array where the colors will be created.
         Color[] colors = new Color[vertices.Length];
-
-        /* The Original Code
-        for (int i = 0; i < vertices.Length; i++)
-            colors[i] = Color.Lerp(Color.blue, Color.green, vertices[i].x);
-        */
-
+        
         for (int i = 0; i < vertices.Length; i++)
         {
             currentDistance = 0.0 + Mathf.Abs(vertices[i].x);
@@ -34,24 +28,22 @@ public class VertColourOnStart1 : MonoBehaviour
         {
             if (vertices[i].x < -margin){
                 colors[i] =  Color.blue;
-                colors[i].a = (float)(1 * (Mathf.Abs(vertices[i].x) / maxDistance));
+                colors[i].a = 1; //(float)(1 * (Mathf.Abs(vertices[i].x) / maxDistance));
             }
             else if (vertices[i].x > margin)
             {
                 colors[i] = Color.red;
                 //colors[i].a = (float)(0.5 + 0.5 / (maxDistance / Mathf.Abs(vertices[i].x)));
-                colors[i].a = (float)(1 * (Mathf.Abs(vertices[i].x) / maxDistance));
+                colors[i].a = 1; //(float)(1 * (Mathf.Abs(vertices[i].x) / maxDistance));
             }
             else
             {
                 colors[i] = Color.white;
-                colors[i].a = 0;
+                colors[i].a = 1;
             }
                 
         }
-            
-
-
+           
         // assign the array of colors to the Mesh.
         mesh.colors = colors;
     }
