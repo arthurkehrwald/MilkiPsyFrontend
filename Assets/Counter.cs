@@ -7,6 +7,7 @@ public class Counter : MonoBehaviour
 {
     private TMP_Text m_TextComponent;
     public float secondsOverall = 80;
+    bool timeIsRunning = true;
     int seconds;
         
     // Start is called before the first frame update
@@ -22,13 +23,22 @@ public class Counter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        secondsOverall -= Time.deltaTime;
-        if (secondsOverall < 0)
-            secondsOverall = 59;
-        // Change the text on the text component.
-        if (secondsOverall < 10)
-            m_TextComponent.text = "02:0" + ((int)secondsOverall).ToString();
-        else
-            m_TextComponent.text = "02:" + ((int)secondsOverall).ToString();
+        if (timeIsRunning)
+        {
+            secondsOverall -= Time.deltaTime;
+            if (secondsOverall < 0)
+                secondsOverall = 59;
+            // Change the text on the text component.
+            if (secondsOverall < 10)
+                m_TextComponent.text = "02:0" + ((int)secondsOverall).ToString();
+            else
+                m_TextComponent.text = "02:" + ((int)secondsOverall).ToString();
+        }
+        
+    }
+
+    public void ToggleTimer()
+    {
+        timeIsRunning = !timeIsRunning;
     }
 }
