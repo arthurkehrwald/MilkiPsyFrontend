@@ -6,9 +6,13 @@ using TMPro;
 public class Counter : MonoBehaviour
 {
     private TMP_Text m_TextComponent;
-    public float secondsOverall = 80;
+    private GameObject timeline;
+    public float startTime = 80;
     bool timeIsRunning = true;
-    int seconds;
+    float seconds;
+    float minutes;
+    string secondsRemaining;
+    string minutesRemaining;
         
     // Start is called before the first frame update
     void Start()
@@ -16,8 +20,8 @@ public class Counter : MonoBehaviour
         // Get a reference to the text component.
         // Since we are using the base class type <TMP_Text> this component could be either a <TextMeshPro> or <TextMeshProUGUI> component.
         m_TextComponent = GetComponent<TMP_Text>();
-
-        
+        timeline = GameObject.FindGameObjectWithTag("Timeline");        
+        SetTimer(startTime);
     }
 
     // Update is called once per frame
@@ -25,20 +29,49 @@ public class Counter : MonoBehaviour
     {
         if (timeIsRunning)
         {
-            secondsOverall -= Time.deltaTime;
-            if (secondsOverall < 0)
-                secondsOverall = 59;
+            seconds -= Time.deltaTime;
+            if (seconds < 0)
+            {
+                if (minutes > 0)
+                    minutes -= 1.0f;
+                else
+                {
+                    ToggleTimer();
+                    timeline.GetComponent<TimelineControl>().SetState(1);
+                    return;
+                }
+                seconds = 60;
+            }
+               
+
             // Change the text on the text component.
-            if (secondsOverall < 10)
-                m_TextComponent.text = "02:0" + ((int)secondsOverall).ToString();
+            if ((int)seconds > 9)
+                secondsRemaining = ((int)seconds).ToString();
             else
-                m_TextComponent.text = "02:" + ((int)secondsOverall).ToString();
+                secondsRemaining = "0" + ((int)seconds).ToString();
+
+            if ((int)minutes > 9)
+                minutesRemaining = ((int)minutes).ToString();
+            else
+                minutesRemaining = "0" + ((int)minutes).ToString();
+
         }
-        
+
+        m_TextComponent.text = minutesRemaining + ":" + secondsRemaining;
+
     }
 
     public void ToggleTimer()
     {
         timeIsRunning = !timeIsRunning;
     }
+
+    public void SetTimer(float time)
+    {
+        startTime = time;
+        minutes = (startTime - startTime % 60) / 60;
+        seconds = startTime % 60;
+    }
+
+   
 }

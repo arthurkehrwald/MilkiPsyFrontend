@@ -6059,7 +6059,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ea32adca33ff9448ab30690d7ad473, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  secondsOverall: 59
+  startTime: 70
 --- !u!114 &1274854826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6213,7 +6213,7 @@ GameObject:
   - component: {fileID: 1323546605}
   m_Layer: 0
   m_Name: TimelineStepsParent
-  m_TagString: Untagged
+  m_TagString: Timeline
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7035,7 +7035,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ea32adca33ff9448ab30690d7ad473, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  secondsOverall: 59
+  startTime: 80
 --- !u!1 &1706554942
 GameObject:
   m_ObjectHideFlags: 0
