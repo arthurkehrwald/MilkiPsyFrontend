@@ -8,7 +8,7 @@ public class TimelineControl : MonoBehaviour
     public int numberOfSteps = 3;
     int currentStep = 0;
 
-    //Timeline Variales
+    //Timeline Variables
     public float lengthOfTimeline = 10;
 
     //Variables for managing the look of the Steps
@@ -16,6 +16,7 @@ public class TimelineControl : MonoBehaviour
     public float sizeX = 1;
     public float sizeY = 1;
     public float sizeZ = 1;
+    private bool instantiationSuccessful = false;
     public GameObject Step;
     GameObject[] Steps;
 
@@ -23,25 +24,26 @@ public class TimelineControl : MonoBehaviour
     public Material StepFinished;
     public Material StepUnfinished;
 
-    // Start is called before the first frame update
+    //GameObject References
+    private GameObject counter;
+    private GameObject stepsParent;
+
+    
     void Start()
     {
-        if ((numberOfSteps - 1) * margin < lengthOfTimeline)
-            sizeX = (lengthOfTimeline - margin * (numberOfSteps - 1)) / (float)numberOfSteps;
-        else
-            Debug.LogWarning(this.gameObject.name + " has a too large margin.");
+        counter = GameObject.FindGameObjectWithTag("Timer");
 
-        Steps = new GameObject[numberOfSteps];
-        //Instantiate all Step Objects, give them a proper Material and position and Scale everything
-        for (int i = 0; i < Steps.Length; i++)
+        Setup();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown("r"))
         {
-            Steps[i] = Instantiate(Step, this.gameObject.transform.position + new Vector3(sizeX / 2 + i*(sizeX + margin),0,0), this.gameObject.transform.rotation);
-            Steps[i].transform.localScale = new Vector3(sizeX, sizeY, sizeZ);
-            Steps[i].name = "Step" + i.ToString();
-            Steps[i].GetComponent<MeshRenderer>().material = StepUnfinished;
-            Steps[i].transform.SetParent(this.gameObject.transform);
+            Setup();
         }
     }
+
 
     //Navigate through the steps and change Materials to reflect currentStep. current Step values are clamped.
     public void SetState(int a)
@@ -50,6 +52,7 @@ public class TimelineControl : MonoBehaviour
         if (finalValue <= numberOfSteps && finalValue >= 0)
         {
             currentStep = finalValue;
+            counter.GetComponent<Counter>().SetTimer(counter.GetComponent<Counter>().startTime);
         } else
         {
             return;
@@ -64,5 +67,55 @@ public class TimelineControl : MonoBehaviour
         {
             Steps[i].GetComponent<MeshRenderer>().material = StepUnfinished;
         }
+    }
+
+    public void Setup()
+    {
+        //margin = (lengthOfTimeline / 4) / (numberOfSteps - 1);
+
+        //Check whether Timeline Subdivisions are possible
+        if ((numberOfSteps - 1) * margin < lengthOfTimeline)
+        {
+            //Destroy Existing Game Objects
+            if (instantiationSuccessful)
+            {
+                for (int i = 0; i < Steps.Length; i++)
+                {
+                    Destroy(Steps[i]);
+                }
+                Destroy(stepsParent);
+            }
+
+            sizeX = (lengthOfTimeline - margin * (numberOfSteps - 1)) / (float)numberOfSteps;
+
+            //Setup Array that will hold references to step objects
+            Steps = new GameObject[numberOfSteps];
+
+            //setup parent for the step objects
+            stepsParent = new GameObject("stepsParent");
+
+            //Instantiate all Step Objects, give them a proper Material and set up their transform relative to each other
+            for (int i = 0; i < Steps.Length; i++)
+            {
+                Steps[i] = Instantiate(Step);
+                Steps[i].transform.position = new Vector3(0, 0, 0) + new Vector3(sizeX / 2 + i * (sizeX + margin), 0, 0);
+                Steps[i].transform.localScale = new Vector3(sizeX, sizeY, sizeZ);
+                Steps[i].name = "Step" + i.ToString();
+                Steps[i].GetComponent<MeshRenderer>().material = StepUnfinished;
+                //Parent Step to a common parent
+                Steps[i].transform.SetParent(stepsParent.transform);
+            }
+            //Align stepsParent to the timeline and then parent it to it
+            stepsParent.transform.position = this.gameObject.transform.position;
+            stepsParent.transform.rotation = this.gameObject.transform.rotation;
+            stepsParent.transform.SetParent(this.gameObject.transform);
+
+            //confirm successful initial instantiation
+            instantiationSuccessful = true;
+            //set step to start at the beginning
+            currentStep = 0;
+        }
+        else
+            Debug.LogWarning("Setup failed. Check margins");
     }
 }
