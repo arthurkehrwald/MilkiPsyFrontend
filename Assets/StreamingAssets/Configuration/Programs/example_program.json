@@ -1,0 +1,19 @@
+{
+    "displayName" : "example program",
+    "stages" :
+    [
+        {
+            "stageFilename" : "example_stage_1.json",
+            "repeats" : 1,
+            "duration" : 25.0
+        },
+        {
+            "stageFilename" : "example_stage_2.json"
+        },
+        {
+            "stageFilename" : "example_stage_3.json",
+            "repeats" : 3,
+            "duration" : 20.0
+        }
+    ]
+}
