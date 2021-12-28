@@ -1,10 +1,11 @@
 {
     "displayName" : "example stage 3",
     "instructionsFilename" : "example_instructions_1.json",
+    "duration" : 10.0,
     "completion_conditions" :
     {
-        "user_input" : true,
-        "evaluation" : false,
-        "timeout" : true
+        "user_input" : false,
+        "evaluation" : true,
+        "timeout" : false
     }
 }

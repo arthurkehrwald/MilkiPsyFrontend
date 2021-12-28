@@ -39,13 +39,6 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
         { ".ogg", MediaType.Audio }
     };
 
-    private readonly Dictionary<string, AudioType> audioTypeOfExension = new Dictionary<string, AudioType>()
-    {
-        { ".wav", AudioType.WAV },
-        { ".mp3", AudioType.MPEG},
-        { ".ogg", AudioType.OGGVORBIS}
-    };
-
     private readonly Dictionary<MediaType, string> folderPathOfMediaType = new Dictionary<MediaType, string>()
     {
         { MediaType.Image, Application.streamingAssetsPath + "/Configuration/Media/Images" },
@@ -145,23 +138,6 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
                     audioSource.Play();
                 });
                 break;
-        }
-    }
-
-    IEnumerator RequestSound(string url, Action<UnityWebRequest> callback)
-    {
-        string extension = Path.GetExtension(url);
-        audioTypeOfExension.TryGetValue(extension, out AudioType type);
-        bool isAudioTypeValid = type != AudioType.UNKNOWN;
-
-        if (!isAudioTypeValid)
-            yield break;
-
-        using (UnityWebRequest request = UnityWebRequestMultimedia.GetAudioClip(url, type))
-        {
-            // Send the request and wait for a response
-            yield return request.SendWebRequest();
-            callback(request);
         }
     }
 }

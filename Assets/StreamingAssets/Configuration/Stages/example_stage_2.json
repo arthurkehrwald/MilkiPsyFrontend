@@ -5,6 +5,6 @@
     {
         "user_input" : true,
         "evaluation" : true,
-        "timeout" : true
+        "timeout" : false
     }
 }

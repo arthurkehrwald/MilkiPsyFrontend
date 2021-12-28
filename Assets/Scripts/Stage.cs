@@ -92,6 +92,7 @@ public class Stage
     {
         public string displayName;
         public string instructionsFilename;
+        public float duration;
         public CanBeCompletedBy canBeCompletedBy;
     }
 

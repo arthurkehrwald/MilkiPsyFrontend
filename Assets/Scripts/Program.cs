@@ -13,7 +13,7 @@ public class Program
 
     private readonly string uniqueName;
     private string displayName;
-    private StageConfig[] stageConfigs;
+    private Stage[] stages;
     private bool isInitializationComplete = false;
     public bool IsInitializationComplete
     {
@@ -53,14 +53,11 @@ public class Program
             ProgramParseResult parseResult = JsonUtility.FromJson<ProgramParseResult>(jsonText);
 
             displayName = parseResult.displayName;
-            StageConfigParseResult[] stageConfigParseResults = parseResult.stages;
-            int stageCount = stageConfigParseResults.Length;
-            stageConfigs = new StageConfig[stageCount];
+            int stageCount = parseResult.stageFilenames.Length;
+            stages = new Stage[stageCount];
             for (int i = 0; i < stageCount; i++)
             {
-                stageConfigs[i].stage = new Stage(stageConfigParseResults[i].stageFilename, this);
-                stageConfigs[i].repeats = stageConfigParseResults[i].repeats;
-                stageConfigs[i].duration = stageConfigParseResults[i].duration;
+                stages[i]= new Stage(parseResult.stageFilenames[i], this);
             }
             IsInitializationComplete = true;
         });
@@ -76,28 +73,13 @@ public class Program
 
         initializationCompleted.RemoveListener(Start);
         RunningProgram = this;
-        stageConfigs[0].stage.Start();
+        stages[0].Start();
     }
 
     [System.Serializable]
     private struct ProgramParseResult
     {
         public string displayName;
-        public StageConfigParseResult[] stages;
-    }
-
-    [System.Serializable]
-    private struct StageConfigParseResult
-    {
-        public string stageFilename;
-        public int repeats;
-        public float duration;
-    }
-
-    private struct StageConfig
-    {
-        public Stage stage;
-        public int repeats;
-        public float duration;
+        public string[] stageFilenames;
     }
 }
