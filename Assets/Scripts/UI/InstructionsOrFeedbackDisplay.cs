@@ -55,6 +55,11 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
 
     private void OnRunningStageChanged(Stage runningStage)
     {
+        if (runningStage == null)
+        {
+            Display(null, null);
+            return;
+        }
         string text = runningStage.Instructions.text;
 
         string mediaFileName = runningStage.Instructions.mediaFileName;
@@ -88,8 +93,14 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
 
     private void DisplayMedia(string mediaFilePath)
     {
-        string mediaFileExtension = Path.GetExtension(mediaFilePath);
-        mediaTypeOfExtension.TryGetValue(mediaFileExtension, out MediaType mediaType);
+        MediaType mediaType = MediaType.Invalid;
+
+        if (File.Exists(mediaFilePath))
+        {
+            string mediaFileExtension = Path.GetExtension(mediaFilePath);
+            mediaTypeOfExtension.TryGetValue(mediaFileExtension, out mediaType);
+        }
+
         bool isMediaFilePathValid = mediaType != MediaType.Invalid;
         mediaArea.SetActive(isMediaFilePathValid);
 

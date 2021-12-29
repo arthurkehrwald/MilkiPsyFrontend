@@ -12,38 +12,61 @@ public class Program
     public readonly string fileName;
     public string DisplayName { get; private set; }
     public List<Stage> Stages { get; private set; }
-    private Stage runningStage;
+    private Stage runningStage = null;
     public Stage RunningStage
     {
         get => runningStage;
         private set
         {
-            if (value == runningStage || !Stages.Contains(value))
+            if (value == runningStage)
             {
                 return;
             }
 
-            runningStage = value;
-            RunningStageIndex = Stages.IndexOf(RunningStage);
-            runningStage.Start();
+            if (Stages.Contains(value))
+            {
+                runningStage = value;
+                RunningStageIndex = Stages.IndexOf(RunningStage);
+                runningStage.Start();
+            }
+            else if (runningStage == null)
+            {
+                return;
+            }
+            else
+            {
+                runningStage = null;
+                RunningStageIndex = -1;
+            }
+
             runningStageChanged?.Invoke(runningStage);
         }
     }
-    private int runningStageIndex;
+    private int runningStageIndex = -1;
     public int RunningStageIndex
     {
         get => runningStageIndex;
-        set
+        private set
         {
-            if (value == runningStageIndex
-                || value < 0
-                || value >= Stages.Count)
+            if (value == runningStageIndex)
             {
                 return;
             }
 
-            runningStageIndex = value;
-            RunningStage = Stages[runningStageIndex];
+            if (value >= 0 && value < Stages.Count)
+            {
+                runningStageIndex = value;
+                RunningStage = Stages[runningStageIndex];
+            }
+            else if (runningStageIndex == -1)
+            {
+                return;
+            }
+            else
+            { 
+                runningStageIndex = -1;
+                RunningStage = null;
+            }
         }
     }
 
@@ -76,7 +99,7 @@ public class Program
 
     public void Start()
     {
-        RunningStage = Stages[0];
+        RunningStageIndex = 0;
     }
 
     public void OnUiGoToPrevStage()
@@ -91,12 +114,14 @@ public class Program
 
     public void OnUiGoToNextStage()
     {
-        if (RunningStage == null || !RunningStage.CanBeCompletedBy.userInput)
+        if (RunningStage == null)
         {
-            return;
+            RunningStageIndex = 0;
         }
-
-        RunningStageIndex++;
+        else if (RunningStage.CanBeCompletedBy.userInput)
+        {
+            RunningStageIndex++;
+        }
     }
 
     [System.Serializable]

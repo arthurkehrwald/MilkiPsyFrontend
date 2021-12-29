@@ -65,6 +65,12 @@ public class Stage
 
     private void OnParentProgramRunningStageChanged(Stage runningStage)
     {
+        if (runningStage == null)
+        {
+            State = StageState.Incomplete;
+            return;
+        }
+
         int i = runningStage.indexInParentProgram;
         if (i == indexInParentProgram)
         {

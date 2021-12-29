@@ -15,6 +15,12 @@ public class StageNameDisplay : MonoBehaviour
 
     private void OnRunningStageChanged(Stage runningStage)
     {
+        if (runningStage == null)
+        {
+            nameText.text = string.Empty;
+            return;
+        }
+
         nameText.text = runningStage.DisplayName;
     }
 }
