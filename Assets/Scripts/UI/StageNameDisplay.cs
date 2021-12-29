@@ -10,7 +10,7 @@ public class StageNameDisplay : MonoBehaviour
 
     private void Awake()
     {
-        Stage.runningStageChanged.AddListener(OnRunningStageChanged);
+        GameManager.Instance.runningStageChanged.AddListener(OnRunningStageChanged);
     }
 
     private void OnRunningStageChanged(Stage runningStage)

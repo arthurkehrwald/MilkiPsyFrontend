@@ -1,91 +1,88 @@
-﻿using System.IO;
+﻿using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum StageState { None, Incomplete, Running, Complete }
+public class StageStateChanged : UnityEvent<StageState> { }
+
 public class Stage
 {
-    public class RunningStageChanged : UnityEvent<Stage> { };
-
-    public UnityEvent initializationCompleted = new UnityEvent();
-    public static RunningStageChanged runningStageChanged = new RunningStageChanged();
-
     private readonly string stagesPath = Application.streamingAssetsPath + "/Configuration/Stages";
     private readonly string instructionsPath = Application.streamingAssetsPath + "/Configuration/InstructionsAndFeedback";
 
-    public readonly string uniqueName;
+    public StageStateChanged stateChanged = new StageStateChanged();
+    public readonly string fileName;
     public string DisplayName { get; private set; }
     public InstructionsOrFeedback Instructions { get; private set; }
     public CanBeCompletedBy CanBeCompletedBy { get; private set; }
-    public Program ParentProgram { get; private set; }
+    public readonly Program parentProgram;
     public readonly int indexInParentProgram;
-
-    private bool isInitializationComplete = false;
-    public bool IsInitializationComplete
-    {
-        get => isInitializationComplete;
-        private set
-        {
-            if (!value || isInitializationComplete)
-            {
-                return;
-            }
-            isInitializationComplete = true;
-            initializationCompleted?.Invoke();
-        }
-    }
-
-    private static Stage runningStage;
-    public static Stage RunningStage
-    {
-        get => runningStage;
-        private set
-        {
-            if (value.ParentProgram != Program.RunningProgram)
-            {
-                return;
-            }
-            runningStage = value;
-            runningStageChanged?.Invoke(runningStage);
-        }
-    }
-
     public float TimeElapsed { get; private set; }
-
-    /// <summary>
-    /// Can throw!
-    /// </summary>    
-    public Stage(string fileName, Program parentProgram, int indexInParentProgram)
+    private StageState state;
+    public StageState State
     {
-        uniqueName = fileName;
-        ParentProgram = parentProgram;
-        this.indexInParentProgram = indexInParentProgram;
-        string stagePath = stagesPath + "/" + fileName;
-        FileAccessHelper.RequestJsonText(stagePath, (stageJsonText) =>
+        get => state;
+        private set
         {
-            StageParseResult parseResult = JsonUtility.FromJson<StageParseResult>(stageJsonText);
-
-            DisplayName = parseResult.displayName;
-            string instructionsPath = this.instructionsPath + "/" + parseResult.instructionsFilename;
-
-            FileAccessHelper.RequestJsonText(instructionsPath, (instructionsJsonText) =>
+            if (value == state)
             {
-                Instructions = JsonUtility.FromJson<InstructionsOrFeedback>(instructionsJsonText);
-                CanBeCompletedBy = parseResult.canBeCompletedBy;
-                IsInitializationComplete = true;
-            });
-        });
+                return;
+            }
+
+            state = value;
+            stateChanged?.Invoke(state);
+        }
+    }
+
+    public static Task<Stage> CreateAsync(string fileName, Program parentProgram, int indexInParentProgram)
+    {
+        Stage stage = new Stage(fileName, parentProgram, indexInParentProgram);
+        return stage.InitializeAsync();
+    }
+
+    private Stage(string fileName, Program parentProgram, int indexInParentProgram)
+    {
+        this.fileName = fileName;
+        this.parentProgram = parentProgram;
+        parentProgram.runningStageChanged.AddListener(OnParentProgramRunningStageChanged);
+        this.indexInParentProgram = indexInParentProgram;
+    }
+
+    private async Task<Stage> InitializeAsync()
+    { 
+        string stagePath = stagesPath + "/" + fileName;
+        string stageJsonText = await FileAccessHelper.RequestJsonText(stagePath);
+
+        StageParseResult parseResult = JsonUtility.FromJson<StageParseResult>(stageJsonText);
+        DisplayName = parseResult.displayName;
+        string instructionsPath = this.instructionsPath + "/" + parseResult.instructionsFilename;
+        string instructionsJsonText = await FileAccessHelper.RequestJsonText(instructionsPath);
+
+        Instructions = JsonUtility.FromJson<InstructionsOrFeedback>(instructionsJsonText);
+        CanBeCompletedBy = parseResult.canBeCompletedBy;
+        return this;
+    }
+
+    private void OnParentProgramRunningStageChanged(Stage runningStage)
+    {
+        int i = runningStage.indexInParentProgram;
+        if (i == indexInParentProgram)
+        {
+            State = StageState.Running;
+        }
+        else if (i < indexInParentProgram)
+        {
+            State = StageState.Incomplete;
+        }
+        else
+        {
+            State = StageState.Complete;
+        }
     }
 
     public void Start()
     {
-        if (!IsInitializationComplete)
-        {
-            initializationCompleted.AddListener(Start);
-            return;
-        }
 
-        initializationCompleted.RemoveListener(Start);
-        RunningStage = this;
     }
 
     [System.Serializable]

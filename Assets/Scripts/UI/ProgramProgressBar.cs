@@ -13,7 +13,7 @@ public class ProgramProgressBar : MonoBehaviour
 
     private void Awake()
     {
-        Program.runningProgramChanged.AddListener(OnRunningProgramChanged);
+        GameManager.Instance.runningProgramChanged.AddListener(OnRunningProgramChanged);
     }
 
     private void OnRunningProgramChanged(Program runningProgram)
@@ -29,9 +29,7 @@ public class ProgramProgressBar : MonoBehaviour
         stageProgressBars = new StageProgressBar[runningProgram.Stages.Length];
         for (int i = 0; i < runningProgram.Stages.Length; i++)
         {
-            GameObject obj = Instantiate(stageProgressBarPrefab.gameObject, stageProgressBarParent);
-            stageProgressBars[i] = obj.GetComponent<StageProgressBar>();
-            stageProgressBars[i].indexOfAssociatedStageInProgram = runningProgram.Stages[i].indexInParentProgram;
+            StageProgressBar.Instantiate(stageProgressBarPrefab, stageProgressBarParent, runningProgram.Stages[i]);
         }
     }
 }

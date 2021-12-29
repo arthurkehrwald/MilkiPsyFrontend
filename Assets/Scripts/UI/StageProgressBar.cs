@@ -19,60 +19,48 @@ public class StageProgressBar : MonoBehaviour
     [SerializeField]
     private LayoutElement layoutElement;
 
-    public int indexOfAssociatedStageInProgram;
-
-    private StageState state;
-    public StageState State
-    {
-        get => state;
-        set
-        {
-            state = value;
-            switch (value)
-            {
-                case StageState.Incomplete:
-                    layoutElement.preferredHeight = notRunningHeight;
-                    rawImage.color = incompleteColor;
-                    break;
-                case StageState.Running:
-                    layoutElement.preferredHeight = runningHeight;
-                    rawImage.color = runningColor;
-                    break;
-                case StageState.Complete:
-                    layoutElement.preferredHeight = notRunningHeight;
-                    rawImage.color = completeColor;
-                    break;
-            }
-        }
-    }
+    public Stage associatedStage;
 
     private float notRunningHeight;
     private float runningHeight;
 
-    private void Awake()
+    public static StageProgressBar Instantiate(StageProgressBar prefab, RectTransform parent, Stage associatedStage)
     {
-        notRunningHeight = layoutElement.preferredHeight;
-        runningHeight = notRunningHeight * runningHeightMult;
-
-        Stage.runningStageChanged.AddListener(OnRunningStageChanged);
+        GameObject gameObj = Instantiate(prefab.gameObject, parent);
+        StageProgressBar bar = gameObj.GetComponent<StageProgressBar>();
+        bar.notRunningHeight = bar.layoutElement.preferredHeight;
+        bar.runningHeight = bar.notRunningHeight * bar.runningHeightMult;
+        bar.associatedStage = associatedStage;
+        bar.associatedStage.stateChanged.AddListener(bar.OnAssociatedStageStateChanged);
+        return bar;
     }
 
-    private void OnRunningStageChanged(Stage runningStage)
+    private void OnEnable()
+    {     
+        associatedStage?.stateChanged.AddListener(OnAssociatedStageStateChanged);
+    }
+
+    private void OnDisable()
     {
-        int i = runningStage.indexInParentProgram;
-        if (i < indexOfAssociatedStageInProgram)
+        associatedStage?.stateChanged.RemoveListener(OnAssociatedStageStateChanged);
+    }
+
+    private void OnAssociatedStageStateChanged(StageState state)
+    {
+        switch (state)
         {
-            State = StageState.Incomplete;
-        }
-        else if (i == indexOfAssociatedStageInProgram)
-        { 
-            State = StageState.Running;
-        }
-        else
-        {
-            State = StageState.Complete;
+            case StageState.Incomplete:
+                layoutElement.preferredHeight = notRunningHeight;
+                rawImage.color = incompleteColor;
+                break;
+            case StageState.Running:
+                layoutElement.preferredHeight = runningHeight;
+                rawImage.color = runningColor;
+                break;
+            case StageState.Complete:
+                layoutElement.preferredHeight = notRunningHeight;
+                rawImage.color = completeColor;
+                break;
         }
     }
 }
-
-public enum StageState { Incomplete, Running, Complete }

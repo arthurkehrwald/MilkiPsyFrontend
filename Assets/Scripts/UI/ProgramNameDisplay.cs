@@ -10,7 +10,7 @@ public class ProgramNameDisplay : MonoBehaviour
 
     private void Awake()
     {
-        Program.runningProgramChanged.AddListener(OnRunningProgramChanged);
+        GameManager.Instance.runningProgramChanged.AddListener(OnRunningProgramChanged);
     }
 
     private void OnRunningProgramChanged(Program runningProgram)

@@ -1,80 +1,61 @@
-using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
+public class RunningStageChanged : UnityEvent<Stage> { }
 public class Program
-{   
-    public class RunningProgramChanged : UnityEvent<Program> { };
-
-    public UnityEvent initializationCompleted = new UnityEvent();
-    public static RunningProgramChanged runningProgramChanged = new RunningProgramChanged();
-
+{
+    public RunningStageChanged runningStageChanged = new RunningStageChanged();
     private readonly string programsPath = Application.streamingAssetsPath + "/Configuration/Programs";
-
-    public readonly string uniqueName;
+    public readonly string fileName;
     public string DisplayName { get; private set; }
     public Stage[] Stages { get; private set; }
-
-    private bool isInitializationComplete = false;
-    public bool IsInitializationComplete
+    private Stage runningStage;
+    public Stage RunningStage
     {
-        get => isInitializationComplete;
+        get => runningStage;
         private set
         {
-            if (!value || isInitializationComplete)
+            if (value == runningStage)
             {
                 return;
             }
-            isInitializationComplete = true;
-            initializationCompleted?.Invoke();
+
+            runningStage = value;
+            runningStage.Start();
+            runningStageChanged?.Invoke(runningStage);
         }
     }
 
-    private static Program runningProgram;
-    public static Program RunningProgram
+    public static Task<Program> CreateAsync(string jsonName)
     {
-        get => runningProgram;
-        private set
-        {
-            runningProgram = value; 
-            runningProgramChanged?.Invoke(runningProgram);
-        }
+        Program program = new Program(jsonName);
+        return program.InitializeAsync();
     }
 
-    /// <summary>
-    /// Can throw!
-    /// </summary>
-    public Program(string jsonName)
+    private Program(string fileName)
     {
-        uniqueName = jsonName;
+        this.fileName = fileName;
+    }
 
-        string jsonPath = programsPath + "/" + jsonName;
-        FileAccessHelper.RequestJsonText(jsonPath, (jsonText) =>
+    private async Task<Program> InitializeAsync()
+    {
+        string jsonPath = programsPath + "/" + fileName;
+        string jsonText = await FileAccessHelper.RequestJsonText(jsonPath);
+
+        ProgramParseResult parseResult = JsonUtility.FromJson<ProgramParseResult>(jsonText);
+        DisplayName = parseResult.displayName;
+        Stages = new Stage[parseResult.stageFilenames.Length];
+        for (int i = 0; i < Stages.Length; i++)
         {
-            ProgramParseResult parseResult = JsonUtility.FromJson<ProgramParseResult>(jsonText);
-
-            DisplayName = parseResult.displayName;
-
-            Stages = new Stage[parseResult.stageFilenames.Length];
-            for (int i = 0; i < Stages.Length; i++)
-            {
-                Stages[i]= new Stage(parseResult.stageFilenames[i], this, i);
-            }
-            IsInitializationComplete = true;
-        });
+            Stages[i] = await Stage.CreateAsync(parseResult.stageFilenames[i], this, i);
+        }
+        return this;
     }
 
     public void Start()
     {
-        if (!IsInitializationComplete)
-        {
-            initializationCompleted.AddListener(Start);
-            return;
-        }
-
-        initializationCompleted.RemoveListener(Start);
-        RunningProgram = this;
-        Stages[0].Start();
+        RunningStage = Stages[0];
     }
 
     [System.Serializable]

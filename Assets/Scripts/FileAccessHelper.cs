@@ -85,4 +85,25 @@ static class FileAccessHelper
         callback(jsonContent);
     }
 
+    public static async Task<string> RequestJsonText(string path)
+    {
+        using UnityWebRequest request = UnityWebRequest.Get(path);
+
+        // Send the request and wait for a response
+        UnityWebRequestAsyncOperation operation = request.SendWebRequest();
+        while (!operation.isDone)
+        {
+            await Task.Yield();
+        }
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError($"{request.error}: {request.downloadHandler.text}");
+            return null;
+        }
+
+        string jsonContent = request.downloadHandler.text;
+        return jsonContent;
+    }
+
 }
