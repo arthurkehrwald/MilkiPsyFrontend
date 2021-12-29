@@ -15,8 +15,9 @@ public class Stage
     public readonly string uniqueName;
     public string DisplayName { get; private set; }
     public InstructionsOrFeedback Instructions { get; private set; }
-    public CanBeCompletedBy _CanBeCompletedBy { get; private set; }
+    public CanBeCompletedBy CanBeCompletedBy { get; private set; }
     public Program ParentProgram { get; private set; }
+    public readonly int indexInParentProgram;
 
     private bool isInitializationComplete = false;
     public bool IsInitializationComplete
@@ -53,11 +54,11 @@ public class Stage
     /// <summary>
     /// Can throw!
     /// </summary>    
-    public Stage(string fileName, Program parentProgram)
+    public Stage(string fileName, Program parentProgram, int indexInParentProgram)
     {
         uniqueName = fileName;
         ParentProgram = parentProgram;
-
+        this.indexInParentProgram = indexInParentProgram;
         string stagePath = stagesPath + "/" + fileName;
         FileAccessHelper.RequestJsonText(stagePath, (stageJsonText) =>
         {
@@ -69,7 +70,7 @@ public class Stage
             FileAccessHelper.RequestJsonText(instructionsPath, (instructionsJsonText) =>
             {
                 Instructions = JsonUtility.FromJson<InstructionsOrFeedback>(instructionsJsonText);
-                _CanBeCompletedBy = parseResult.canBeCompletedBy;
+                CanBeCompletedBy = parseResult.canBeCompletedBy;
                 IsInitializationComplete = true;
             });
         });
@@ -95,20 +96,19 @@ public class Stage
         public float duration;
         public CanBeCompletedBy canBeCompletedBy;
     }
+}
 
-    [System.Serializable]
-    public struct CanBeCompletedBy
-    {
-        public bool userInput;
-        public bool evaluation;
-        public bool timeout;
-    }
+[System.Serializable]
+public struct CanBeCompletedBy
+{
+    public bool userInput;
+    public bool evaluation;
+    public bool timeout;
+}
 
-    [System.Serializable]
-    public struct InstructionsOrFeedback
-    {
-        public string mediaFileName;
-        public string text;
-    }
-
+[System.Serializable]
+public struct InstructionsOrFeedback
+{
+    public string mediaFileName;
+    public string text;
 }

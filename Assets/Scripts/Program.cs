@@ -1,4 +1,4 @@
-using System.IO;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,9 +11,10 @@ public class Program
 
     private readonly string programsPath = Application.streamingAssetsPath + "/Configuration/Programs";
 
-    private readonly string uniqueName;
-    private string displayName;
-    private Stage[] stages;
+    public readonly string uniqueName;
+    public string DisplayName { get; private set; }
+    public Stage[] Stages { get; private set; }
+
     private bool isInitializationComplete = false;
     public bool IsInitializationComplete
     {
@@ -52,12 +53,12 @@ public class Program
         {
             ProgramParseResult parseResult = JsonUtility.FromJson<ProgramParseResult>(jsonText);
 
-            displayName = parseResult.displayName;
-            int stageCount = parseResult.stageFilenames.Length;
-            stages = new Stage[stageCount];
-            for (int i = 0; i < stageCount; i++)
+            DisplayName = parseResult.displayName;
+
+            Stages = new Stage[parseResult.stageFilenames.Length];
+            for (int i = 0; i < Stages.Length; i++)
             {
-                stages[i]= new Stage(parseResult.stageFilenames[i], this);
+                Stages[i]= new Stage(parseResult.stageFilenames[i], this, i);
             }
             IsInitializationComplete = true;
         });
@@ -73,7 +74,7 @@ public class Program
 
         initializationCompleted.RemoveListener(Start);
         RunningProgram = this;
-        stages[0].Start();
+        Stages[0].Start();
     }
 
     [System.Serializable]
