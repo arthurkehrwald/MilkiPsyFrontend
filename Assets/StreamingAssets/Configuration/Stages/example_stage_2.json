@@ -1,10 +1,10 @@
 {
-    "displayName" : "example stage 2",
-    "instructionsFilename" : "example_instructions_2.json",
-    "completion_conditions" :
+    "displayName": "example stage 2",
+    "instructionsFilename": "example_instructions_2.json",
+    "canBeCompletedBy":
     {
-        "user_input" : true,
-        "evaluation" : true,
-        "timeout" : false
+        "userInput": true,
+        "evaluation": true,
+        "timeout": false
     }
 }

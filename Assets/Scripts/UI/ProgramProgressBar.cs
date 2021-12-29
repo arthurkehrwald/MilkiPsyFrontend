@@ -26,8 +26,8 @@ public class ProgramProgressBar : MonoBehaviour
             }
         }
 
-        stageProgressBars = new StageProgressBar[runningProgram.Stages.Length];
-        for (int i = 0; i < runningProgram.Stages.Length; i++)
+        stageProgressBars = new StageProgressBar[runningProgram.Stages.Count];
+        for (int i = 0; i < runningProgram.Stages.Count; i++)
         {
             StageProgressBar.Instantiate(stageProgressBarPrefab, stageProgressBarParent, runningProgram.Stages[i]);
         }
