@@ -25,9 +25,9 @@ public class Program
 
             if (Stages.Contains(value))
             {
+                runningStage?.stateChanged.RemoveListener(OnRunningStageStateChanged);
                 runningStage = value;
                 RunningStageIndex = Stages.IndexOf(RunningStage);
-                runningStage.Start();
             }
             else if (runningStage == null)
             {
@@ -35,11 +35,13 @@ public class Program
             }
             else
             {
+                runningStage.stateChanged.RemoveListener(OnRunningStageStateChanged);
                 runningStage = null;
                 RunningStageIndex = -1;
             }
 
             runningStageChanged?.Invoke(runningStage);
+            runningStage?.stateChanged.AddListener(OnRunningStageStateChanged);
         }
     }
     private int runningStageIndex = -1;
@@ -97,9 +99,14 @@ public class Program
         return this;
     }
 
-    public void Start()
+    public void StartRunning()
     {
         RunningStageIndex = 0;
+    }
+
+    public void UpdateRunning()
+    {
+        RunningStage?.UpdateRunning();
     }
 
     public void OnUiGoToPrevStage()
@@ -118,9 +125,26 @@ public class Program
         {
             RunningStageIndex = 0;
         }
-        else if (RunningStage.CanBeCompletedBy.userInput)
+
+        RunningStageIndex++;
+    }
+
+    private void OnRunningStageStateChanged(StageState state)
+    {
+        switch (state)
         {
-            RunningStageIndex++;
+            case StageState.None:
+                RunningStageIndex = 0;
+                break;
+            case StageState.Incomplete:
+                RunningStageIndex--;
+                break;
+            case StageState.Running:
+                // Makes no sense and should never happen
+                break;
+            case StageState.Complete:
+                RunningStageIndex++;
+                break;
         }
     }
 

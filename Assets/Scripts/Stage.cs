@@ -1,6 +1,9 @@
 ﻿using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Scripting;
+using System.Timers;
+using System.Collections;
 
 public enum StageState { None, Incomplete, Running, Complete }
 public class StageStateChanged : UnityEvent<StageState> { }
@@ -14,10 +17,10 @@ public class Stage
     public readonly string fileName;
     public string DisplayName { get; private set; }
     public InstructionsOrFeedback Instructions { get; private set; }
-    public CanBeCompletedBy CanBeCompletedBy { get; private set; }
     public readonly Program parentProgram;
     public readonly int indexInParentProgram;
-    public float TimeElapsed { get; private set; }
+    public float Duration { get; private set; }
+    private float startRunningTime;
     private StageState state;
     public StageState State
     {
@@ -30,6 +33,7 @@ public class Stage
             }
 
             state = value;
+            startRunningTime = state == StageState.Running ? Time.time : 0f;
             stateChanged?.Invoke(state);
         }
     }
@@ -44,7 +48,7 @@ public class Stage
     {
         this.fileName = fileName;
         this.parentProgram = parentProgram;
-        parentProgram.runningStageChanged.AddListener(OnParentProgramRunningStageChanged);
+        this.parentProgram.runningStageChanged.AddListener(OnParentProgramRunningStageChanged);
         this.indexInParentProgram = indexInParentProgram;
     }
 
@@ -55,11 +59,11 @@ public class Stage
 
         StageParseResult parseResult = JsonUtility.FromJson<StageParseResult>(stageJsonText);
         DisplayName = parseResult.displayName;
+        Duration = parseResult.durationSeconds;
         string instructionsPath = this.instructionsPath + "/" + parseResult.instructionsFilename;
         string instructionsJsonText = await FileAccessHelper.RequestJsonText(instructionsPath);
 
         Instructions = JsonUtility.FromJson<InstructionsOrFeedback>(instructionsJsonText);
-        CanBeCompletedBy = parseResult.canBeCompletedBy;
         return this;
     }
 
@@ -86,9 +90,16 @@ public class Stage
         }
     }
 
-    public void Start()
+    public void UpdateRunning()
     {
-
+        if (State == StageState.Running && Duration > 0f)
+        {
+            float elapsedTime = Time.time - startRunningTime;
+            if (elapsedTime >= Duration)
+            {
+                State = StageState.Complete;
+            }
+        }
     }
 
     [System.Serializable]
@@ -96,17 +107,9 @@ public class Stage
     {
         public string displayName;
         public string instructionsFilename;
-        public float duration;
-        public CanBeCompletedBy canBeCompletedBy;
+        public float durationSeconds;
+        public bool canBeCompletedByUserInput;
     }
-}
-
-[System.Serializable]
-public struct CanBeCompletedBy
-{
-    public bool userInput;
-    public bool evaluation;
-    public bool timeout;
 }
 
 [System.Serializable]

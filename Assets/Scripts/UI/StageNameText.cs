@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class StageNameDisplay : MonoBehaviour
+public class StageNameText : MonoBehaviour
 {
     [SerializeField]
     private TextMeshProUGUI nameText;
@@ -15,12 +15,12 @@ public class StageNameDisplay : MonoBehaviour
 
     private void OnRunningStageChanged(Stage runningStage)
     {
-        if (runningStage == null)
-        {
-            nameText.text = string.Empty;
-            return;
-        }
+        bool isStageRunning = runningStage != null;
+        nameText.gameObject.SetActive(isStageRunning);
 
-        nameText.text = runningStage.DisplayName;
+        if (runningStage != null)
+        {
+            nameText.text = runningStage.DisplayName;
+        }
     }
 }

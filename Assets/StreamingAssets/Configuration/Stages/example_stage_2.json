@@ -1,10 +1,4 @@
 {
     "displayName": "example stage 2",
-    "instructionsFilename": "example_instructions_2.json",
-    "canBeCompletedBy":
-    {
-        "userInput": true,
-        "evaluation": true,
-        "timeout": false
-    }
+    "instructionsFilename": "example_instructions_2.json"
 }

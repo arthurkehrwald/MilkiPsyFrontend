@@ -1,11 +1,5 @@
 {
     "displayName": "example stage 3",
     "instructionsFilename": "example_instructions_1.json",
-    "duration": 10.0,
-    "canBeCompletedBy":
-    {
-        "userInput": true,
-        "evaluation": true,
-        "timeout": false
-    }
+    "durationSeconds": 10.0
 }

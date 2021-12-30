@@ -27,13 +27,18 @@ public class GameManager : Singleton<GameManager>
             runningProgram = value;
             runningProgramChanged?.Invoke(runningProgram);
             runningProgram?.runningStageChanged.AddListener(OnRunningProgramStageChanged);
-            runningProgram?.Start();
+            runningProgram?.StartRunning();
         }
     }
 
     private async void Start()
     {
         RunningProgram = await Program.CreateAsync("example_program.json");
+    }
+
+    private void Update()
+    {
+        RunningProgram?.UpdateRunning();
     }
 
     private void OnRunningProgramStageChanged(Stage runningStage)
