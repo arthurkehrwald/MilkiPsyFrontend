@@ -8,7 +8,6 @@ public class RunningStageChanged : UnityEvent<Stage> { }
 public class Program
 {
     public RunningStageChanged runningStageChanged = new RunningStageChanged();
-    private readonly string programsPath = Application.streamingAssetsPath + "/Configuration/Programs";
     public readonly string fileName;
     public string DisplayName { get; private set; }
     public List<Stage> Stages { get; private set; }
@@ -85,8 +84,8 @@ public class Program
 
     private async Task<Program> InitializeAsync()
     {
-        string jsonPath = programsPath + "/" + fileName;
-        string jsonText = await FileAccessHelper.RequestJsonText(jsonPath);
+        string jsonPath = ConfigFolderPaths.Instance.ProgramFolderPath + "/" + fileName;
+        string jsonText = await FileAccessHelper.LoadTextAsync(jsonPath);
 
         ProgramParseResult parseResult = JsonUtility.FromJson<ProgramParseResult>(jsonText);
         DisplayName = parseResult.displayName;
@@ -111,12 +110,10 @@ public class Program
 
     public void OnUiGoToPrevStage()
     {
-        if (RunningStage == null)
+        if (RunningStage != null)
         {
-            return;
+            RunningStageIndex--;
         }
-
-        RunningStageIndex--;
     }
 
     public void OnUiGoToNextStage()
@@ -125,8 +122,10 @@ public class Program
         {
             RunningStageIndex = 0;
         }
-
-        RunningStageIndex++;
+        else
+        {
+            RunningStageIndex++;
+        }
     }
 
     private void OnRunningStageStateChanged(StageState state)

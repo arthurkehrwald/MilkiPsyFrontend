@@ -1,18 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Scripting;
-using System.Timers;
-using System.Collections;
 
 public enum StageState { None, Incomplete, Running, Complete }
 public class StageStateChanged : UnityEvent<StageState> { }
 
 public class Stage
 {
-    private readonly string stagesPath = Application.streamingAssetsPath + "/Configuration/Stages";
-    private readonly string instructionsPath = Application.streamingAssetsPath + "/Configuration/InstructionsAndFeedback";
-
     public StageStateChanged stateChanged = new StageStateChanged();
     public readonly string fileName;
     public string DisplayName { get; private set; }
@@ -54,14 +49,14 @@ public class Stage
 
     private async Task<Stage> InitializeAsync()
     { 
-        string stagePath = stagesPath + "/" + fileName;
-        string stageJsonText = await FileAccessHelper.RequestJsonText(stagePath);
+        string stagePath = ConfigFolderPaths.Instance.StageFolderPath + "/" + fileName;
+        string stageJsonText = await FileAccessHelper.LoadTextAsync(stagePath);
 
         StageParseResult parseResult = JsonUtility.FromJson<StageParseResult>(stageJsonText);
         DisplayName = parseResult.displayName;
         Duration = parseResult.durationSeconds;
-        string instructionsPath = this.instructionsPath + "/" + parseResult.instructionsFilename;
-        string instructionsJsonText = await FileAccessHelper.RequestJsonText(instructionsPath);
+        string instructionsPath = ConfigFolderPaths.Instance.InstructionsAndFeedbackPath + "/" + parseResult.instructionsFilename;
+        string instructionsJsonText = await FileAccessHelper.LoadTextAsync(instructionsPath);
 
         Instructions = JsonUtility.FromJson<InstructionsOrFeedback>(instructionsJsonText);
         return this;
@@ -102,7 +97,7 @@ public class Stage
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     private struct StageParseResult
     {
         public string displayName;
@@ -112,7 +107,7 @@ public class Stage
     }
 }
 
-[System.Serializable]
+[Serializable]
 public struct InstructionsOrFeedback
 {
     public string mediaFileName;

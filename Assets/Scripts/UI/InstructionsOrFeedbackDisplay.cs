@@ -1,10 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.UI;
-using UnityEngine.Networking;
 using System.IO;
 using TMPro;
 
@@ -39,13 +37,6 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
         { ".ogg", MediaType.Audio }
     };
 
-    private readonly Dictionary<MediaType, string> folderPathOfMediaType = new Dictionary<MediaType, string>()
-    {
-        { MediaType.Image, Application.streamingAssetsPath + "/Configuration/Media/Images" },
-        { MediaType.Video, Application.streamingAssetsPath + "/Configuration/Media/Videos" },
-        { MediaType.Audio, Application.streamingAssetsPath + "/Configuration/Media/Audio" }
-    };
-
     private enum MediaType { Invalid, Image, Video, Audio };
 
     private void Awake()
@@ -55,30 +46,12 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
 
     private void OnRunningStageChanged(Stage runningStage)
     {
-        if (runningStage == null)
-        {
-            Display(null, null);
-            return;
-        }
-        string text = runningStage.Instructions.text;
-
-        string mediaFileName = runningStage.Instructions.mediaFileName;
-        string mediaFileExtension = Path.GetExtension(mediaFileName);
-        mediaTypeOfExtension.TryGetValue(mediaFileExtension, out MediaType mediaType);
-        if (mediaType == MediaType.Invalid)
-        {
-            return;
-        }
-        string mediaFilePath = folderPathOfMediaType[mediaType] + "/" + mediaFileName;
-
-        Display(text, mediaFilePath);
-    }
-
-    public void Display(string text, string mediaFilePath)
-    {
+        string text = runningStage?.Instructions.text;
+        string mediaFileName = runningStage?.Instructions.mediaFileName;
         DisplayText(text);
-        DisplayMedia(mediaFilePath);
+        DisplayMediaAsync(mediaFileName);
     }
+
 
     private void DisplayText(string text)
     {
@@ -91,64 +64,80 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
         textUI.text = text;
     }
 
-    private void DisplayMedia(string mediaFilePath)
+    private async Task DisplayMediaAsync(string mediaFileName)
     {
-        MediaType mediaType = MediaType.Invalid;
+        MediaType mediaType = MediaTypeOfFile(mediaFileName);
 
-        if (File.Exists(mediaFilePath))
-        {
-            string mediaFileExtension = Path.GetExtension(mediaFilePath);
-            mediaTypeOfExtension.TryGetValue(mediaFileExtension, out mediaType);
-        }
-
-        bool isMediaFilePathValid = mediaType != MediaType.Invalid;
-        mediaArea.SetActive(isMediaFilePathValid);
-
-        if (!isMediaFilePathValid)
-            return;
+        mediaArea.SetActive(mediaType != MediaType.Invalid);
+        image.gameObject.SetActive(false);
+        videoPlayer.gameObject.SetActive(false);
+        audioSource.gameObject.SetActive(false);
 
         switch (mediaType)
         {
             case MediaType.Image:
-                image.gameObject.SetActive(true);
-                videoPlayer.gameObject.SetActive(false);
-                audioSource.gameObject.SetActive(false);
-
-                FileAccessHelper.RequestTexture(mediaFilePath, (texture) =>
-                {
-                    image.texture = texture;
-                    aspectRatioFitter.aspectRatio = (float)image.texture.width / image.texture.height;
-                });
+                await DisplayImageAsync(mediaFileName);
                 break;
             case MediaType.Video:
-                image.gameObject.SetActive(false);
-                videoPlayer.gameObject.SetActive(true);
-                audioSource.gameObject.SetActive(false);
-
-                videoPlayer.renderMode = VideoRenderMode.RenderTexture;
-                videoPlayer.url = mediaFilePath;
-                videoPlayer.prepareCompleted += (VideoPlayer videoPlayer) =>
-                {
-                    int videoWidth = videoPlayer.texture.width;
-                    int videoHeight = videoPlayer.texture.height;
-                    videoPlayer.targetTexture = new RenderTexture(videoWidth, videoHeight, 0);
-                    videoImage.texture = videoPlayer.targetTexture;
-                    aspectRatioFitter.aspectRatio = (float)videoWidth / videoHeight;
-                    videoPlayer.Play();
-                };
+                await DisplayVideoAsync(mediaFileName);
                 break;
             case MediaType.Audio:
-                image.gameObject.SetActive(false);
-                videoPlayer.gameObject.SetActive(false);
-                audioSource.gameObject.SetActive(true);
-
-                FileAccessHelper.RequestAudioClip(mediaFilePath, (AudioClip clip) =>
-                {
-                    audioSource.Stop();
-                    audioSource.clip = clip;
-                    audioSource.Play();
-                });
+                await DisplayAudioAsync(mediaFileName); 
                 break;
         }
+    }
+
+    private MediaType MediaTypeOfFile(string path)
+    {
+        string mediaFileExtension = Path.GetExtension(path);
+        mediaTypeOfExtension.TryGetValue(mediaFileExtension, out MediaType mediaType);
+        return mediaType;
+    }
+
+    private async Task DisplayImageAsync(string imageFileName)
+    {
+        string imageFilePath = ConfigFolderPaths.Instance.ImageFolderPath + "/" + imageFileName;
+        image.texture = await FileAccessHelper.LoadTextureAsync(imageFilePath);
+        aspectRatioFitter.aspectRatio = (float)image.texture.width / image.texture.height;
+        image.gameObject.SetActive(true);
+    }
+
+    private async Task DisplayVideoAsync(string videoFileName)
+    {
+        string videoFilePath = ConfigFolderPaths.Instance.VideoFolderPath + "/" + videoFileName;
+
+#if UNITY_WSA && !UNITY_EDITOR
+        // On HoloLens, VideoPlayer can't read from user storage (e.g. Documents),
+        // even if the appropriate capability is declared in the manifest.
+        // As a workaround, copy videos to streaming assets folder first.
+        string copyDest = Application.streamingAssetsPath + "/" + videoFileName;
+        await FileAccessHelper.CopyAsync(videoFilePath, copyDest);
+        videoFilePath = copyDest;
+#endif
+
+        videoPlayer.gameObject.SetActive(true);
+        videoPlayer.renderMode = VideoRenderMode.RenderTexture;
+        videoPlayer.url = videoFilePath;
+
+        while (!videoPlayer.isPrepared)
+        {
+            await Task.Yield();
+        }
+
+        int videoWidth = videoPlayer.texture.width;
+        int videoHeight = videoPlayer.texture.height;
+        videoPlayer.targetTexture = new RenderTexture(videoWidth, videoHeight, 0);
+        videoImage.texture = videoPlayer.targetTexture;
+        aspectRatioFitter.aspectRatio = (float)videoWidth / videoHeight;
+        videoPlayer.Play();
+    }
+
+    private async Task DisplayAudioAsync(string audioFileName)
+    {
+        string audioFilePath = ConfigFolderPaths.Instance.AudioFolderPath + "/" + audioFileName;
+        audioSource.Stop();
+        audioSource.clip = await FileAccessHelper.LoadAudioClipAsync(audioFilePath);
+        audioSource.gameObject.SetActive(true);
+        audioSource.Play();
     }
 }

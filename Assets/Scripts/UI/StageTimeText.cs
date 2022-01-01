@@ -51,7 +51,7 @@ public class StageTimeText : MonoBehaviour
             }
 
             TimeSpan timespan = TimeSpan.FromSeconds(displaySeconds);
-            stageTimeText.text = timespan.ToString(@"mm\:ss");
+            stageTimeText.text = timespan.ToString(@"m\:ss");
         }
     }
 }

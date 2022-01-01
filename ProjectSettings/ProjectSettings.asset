@@ -139,7 +139,11 @@ PlayerSettings:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 216728914372065870, guid: 82f7f61b6d8a90d4280f72b5d1cd22e9, type: 2}
+  - {fileID: 0}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -157,6 +161,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
+    Android: com.MILKIPSY.MilkiPsyFrontend
     Standalone: com.MILKI-PSY.MilkiPsyFrontend
   buildNumber:
     Standalone: 0
@@ -172,7 +177,7 @@ PlayerSettings:
   iPhoneStrippingLevel: 0
   iPhoneScriptCallOptimization: 0
   ForceInternetPermission: 0
-  ForceSDCardPermission: 0
+  ForceSDCardPermission: 1
   CreateWallpaper: 0
   APKExpansionFiles: 0
   keepLoadedShadersAlive: 0
@@ -730,7 +735,11 @@ PlayerSettings:
   platformCapabilities:
     WindowsStoreApps:
       GazeInput: True
+      UserDataTasks: False
+      PrivateNetworkClientServer: False
+      InternetClientServer: False
       SpatialPerception: True
+      PicturesLibrary: False
       InternetClient: True
       Microphone: True
   metroTargetDeviceFamilies: {}
