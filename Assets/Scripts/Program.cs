@@ -84,7 +84,7 @@ public class Program
 
     private async Task<Program> InitializeAsync()
     {
-        string jsonPath = ConfigFolderPaths.Instance.ProgramFolderPath + "/" + fileName;
+        string jsonPath = ConfigPaths.Instance.ProgramFolderPath + "/" + fileName;
         string jsonText = await FileAccessHelper.LoadTextAsync(jsonPath);
 
         ProgramParseResult parseResult = JsonUtility.FromJson<ProgramParseResult>(jsonText);

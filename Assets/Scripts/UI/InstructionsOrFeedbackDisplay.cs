@@ -44,12 +44,12 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
         GameManager.Instance.runningStageChanged.AddListener(OnRunningStageChanged);
     }
 
-    private void OnRunningStageChanged(Stage runningStage)
+    private async void OnRunningStageChanged(Stage runningStage)
     {
         string text = runningStage?.Instructions.text;
         string mediaFileName = runningStage?.Instructions.mediaFileName;
         DisplayText(text);
-        DisplayMediaAsync(mediaFileName);
+        await DisplayMediaAsync(mediaFileName);
     }
 
 
@@ -69,9 +69,6 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
         MediaType mediaType = MediaTypeOfFile(mediaFileName);
 
         mediaArea.SetActive(mediaType != MediaType.Invalid);
-        image.gameObject.SetActive(false);
-        videoPlayer.gameObject.SetActive(false);
-        audioSource.gameObject.SetActive(false);
 
         switch (mediaType)
         {
@@ -96,15 +93,17 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
 
     private async Task DisplayImageAsync(string imageFileName)
     {
-        string imageFilePath = ConfigFolderPaths.Instance.ImageFolderPath + "/" + imageFileName;
+        string imageFilePath = ConfigPaths.Instance.ImageFolderPath + "/" + imageFileName;
         image.texture = await FileAccessHelper.LoadTextureAsync(imageFilePath);
         aspectRatioFitter.aspectRatio = (float)image.texture.width / image.texture.height;
         image.gameObject.SetActive(true);
+        videoPlayer.gameObject.SetActive(false);
+        audioSource.gameObject.SetActive(false);
     }
 
     private async Task DisplayVideoAsync(string videoFileName)
     {
-        string videoFilePath = ConfigFolderPaths.Instance.VideoFolderPath + "/" + videoFileName;
+        string videoFilePath = ConfigPaths.Instance.VideoFolderPath + "/" + videoFileName;
 
 #if UNITY_WSA && !UNITY_EDITOR
         // On HoloLens, VideoPlayer can't read from user storage (e.g. Documents),
@@ -115,6 +114,8 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
         videoFilePath = copyDest;
 #endif
 
+        image.gameObject.SetActive(false);
+        audioSource.gameObject.SetActive(false);
         videoPlayer.gameObject.SetActive(true);
         videoPlayer.renderMode = VideoRenderMode.RenderTexture;
         videoPlayer.url = videoFilePath;
@@ -134,10 +135,12 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
 
     private async Task DisplayAudioAsync(string audioFileName)
     {
-        string audioFilePath = ConfigFolderPaths.Instance.AudioFolderPath + "/" + audioFileName;
+        string audioFilePath = ConfigPaths.Instance.AudioFolderPath + "/" + audioFileName;
         audioSource.Stop();
         audioSource.clip = await FileAccessHelper.LoadAudioClipAsync(audioFilePath);
         audioSource.gameObject.SetActive(true);
+        image.gameObject.SetActive(false);
+        videoPlayer.gameObject.SetActive(false);
         audioSource.Play();
     }
 }

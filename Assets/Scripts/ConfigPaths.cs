@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-public class ConfigFolderPaths : Singleton<ConfigFolderPaths>
+public class ConfigPaths : Singleton<ConfigPaths>
 {
     public string ConfigFolderPath { get; private set; }
     public string ProgramFolderPath { get; private set; }
@@ -11,6 +11,7 @@ public class ConfigFolderPaths : Singleton<ConfigFolderPaths>
     public string ImageFolderPath { get; private set; }
     public string VideoFolderPath { get; private set; }
     public string AudioFolderPath { get; private set; }
+    public string ServerAddressPath { get; private set; }
 
     private void Awake()
     {
@@ -27,5 +28,6 @@ public class ConfigFolderPaths : Singleton<ConfigFolderPaths>
         ImageFolderPath = MediaFolderPath + "/Images";
         VideoFolderPath = MediaFolderPath + "/Videos";
         AudioFolderPath = MediaFolderPath + "/Audio";
+        ServerAddressPath = ConfigFolderPath + "/ServerAddress.json";
     }
 }

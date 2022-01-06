@@ -12,14 +12,23 @@ EditorBuildSettings:
     path: Assets/Scenes/Testing/MrtkTutorialGettingStarted.unity
     guid: 3e30bbd622f59db438255785100f02ad
   - enabled: 0
-    path: Assets/Scenes/Testing/Networking/TelepathyTest.unity
+    path: Assets/Testing/Networking/TelepathyTest.unity
     guid: 38995d1670c10f54aa348379589096a1
   - enabled: 0
     path: Assets/Scenes/HoloLensMain.unity
     guid: 3629656f89991ac4c92a30f01fee7c2e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MainScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 0
+    path: Assets/Testing/Networking/TcpClientDaniel.unity
+    guid: 1c3d0e08c3555b14a91c8210bbfb0936
+  - enabled: 0
+    path: Assets/Testing/Networking/TcpClient_Microsoft.unity
+    guid: c0aa7c77cae535a40a3df938a1b29611
+  - enabled: 1
+    path: Assets/Testing/Networking/TomWeiland/TcpClient_TomWeiland.unity
+    guid: 9966e269c0b13064d80d1752442e3055
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 312603e6be7dc6e43bdd1803d957abcc, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 82f7f61b6d8a90d4280f72b5d1cd22e9, type: 2}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,9 +13,9 @@ public class GameManager : Singleton<GameManager>
     // event of the running program. Users don't need to worry about
     // changing their subscription when the running program changes
     public RunningStageChanged runningStageChanged = new RunningStageChanged();
+
     private List<Program> programs = new List<Program>();
     private Program runningProgram;
-
     public Program RunningProgram
     {
         get => runningProgram;
@@ -61,7 +62,7 @@ public class GameManager : Singleton<GameManager>
 
     private void ParseAllPrograms()
     {
-        string path = ConfigFolderPaths.Instance.ProgramFolderPath;
+        string path = ConfigPaths.Instance.ProgramFolderPath;
         DirectoryInfo dataDir = new DirectoryInfo(path);
 
         try
