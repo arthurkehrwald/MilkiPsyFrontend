@@ -87,6 +87,12 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
     private MediaType MediaTypeOfFile(string path)
     {
         string mediaFileExtension = Path.GetExtension(path);
+
+        if (path == null)
+        {
+            return MediaType.Invalid;
+        }
+
         mediaTypeOfExtension.TryGetValue(mediaFileExtension, out MediaType mediaType);
         return mediaType;
     }

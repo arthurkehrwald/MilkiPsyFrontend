@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,6 +11,7 @@ public class Stage
 {
     public StageStateChanged stateChanged = new StageStateChanged();
     public readonly string fileName;
+    public readonly string uniqueName;
     public string DisplayName { get; private set; }
     public InstructionsOrFeedback Instructions { get; private set; }
     public readonly Program parentProgram;
@@ -42,6 +44,7 @@ public class Stage
     private Stage(string fileName, Program parentProgram, int indexInParentProgram)
     {
         this.fileName = fileName;
+        uniqueName = Path.GetFileNameWithoutExtension(fileName);
         this.parentProgram = parentProgram;
         this.parentProgram.runningStageChanged.AddListener(OnParentProgramRunningStageChanged);
         this.indexInParentProgram = indexInParentProgram;

@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Testing/Networking/TelepathyTest.unity
     guid: 38995d1670c10f54aa348379589096a1
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/HoloLensMain.unity
     guid: 3629656f89991ac4c92a30f01fee7c2e
   - enabled: 0
@@ -26,7 +26,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Testing/Networking/TcpClient_Microsoft.unity
     guid: c0aa7c77cae535a40a3df938a1b29611
-  - enabled: 1
+  - enabled: 0
     path: Assets/Testing/Networking/TomWeiland/TcpClient_TomWeiland.unity
     guid: 9966e269c0b13064d80d1752442e3055
   m_configObjects:

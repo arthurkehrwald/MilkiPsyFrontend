@@ -1,3 +1,4 @@
+using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class Program
     public RunningStageChanged runningStageChanged = new RunningStageChanged();
     public readonly string fileName;
     public string DisplayName { get; private set; }
+    public readonly string uniqueName;
     public List<Stage> Stages { get; private set; }
     private Stage runningStage = null;
     public Stage RunningStage
@@ -80,6 +82,7 @@ public class Program
     private Program(string fileName)
     {
         this.fileName = fileName;
+        uniqueName = Path.GetFileNameWithoutExtension(fileName);
     }
 
     private async Task<Program> InitializeAsync()
