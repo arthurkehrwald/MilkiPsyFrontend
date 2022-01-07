@@ -50,7 +50,7 @@ public class StageProgressBar : MonoBehaviour
         switch (state)
         {
             case StageState.Incomplete:
-                layoutElement.preferredHeight = notRunningHeight;
+                layoutElement.preferredHeight = runningHeight;
                 rawImage.color = incompleteColor;
                 break;
             case StageState.Running:
@@ -58,7 +58,7 @@ public class StageProgressBar : MonoBehaviour
                 rawImage.color = runningColor;
                 break;
             case StageState.Complete:
-                layoutElement.preferredHeight = notRunningHeight;
+                layoutElement.preferredHeight = runningHeight;
                 rawImage.color = completeColor;
                 break;
         }

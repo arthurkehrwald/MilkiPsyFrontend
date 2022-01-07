@@ -106,10 +106,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea341082d940184f8ac3603d817fbd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  incompleteColor: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 1}
-  runningColor: {r: 0, g: 0.7169812, b: 0.075280815, a: 1}
-  completeColor: {r: 0, g: 0.254717, b: 0.017368691, a: 1}
+  incompleteColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  runningColor: {r: 0.5882353, g: 0.9843138, b: 0.98823535, a: 1}
+  completeColor: {r: 0.505162, g: 0.8270021, b: 0.8301887, a: 1}
   runningHeightMult: 2
   rawImage: {fileID: 5888013360582402450}
   layoutElement: {fileID: 5617645865907268597}
-  indexOfAssociatedStageInProgram: 0

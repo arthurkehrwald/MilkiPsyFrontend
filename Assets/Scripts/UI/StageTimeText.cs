@@ -51,7 +51,10 @@ public class StageTimeText : MonoBehaviour
             }
 
             TimeSpan timespan = TimeSpan.FromSeconds(displaySeconds);
-            stageTimeText.text = timespan.ToString(@"m\:ss");
+            if (displaySeconds > 600)   
+                stageTimeText.text = timespan.ToString(@"m\:ss");
+            else
+                stageTimeText.text = "0" + timespan.ToString(@"m\:ss");
         }
     }
 }
