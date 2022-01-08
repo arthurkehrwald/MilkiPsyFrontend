@@ -6,7 +6,7 @@ public static class ConfigPaths
 #if UNITY_ANDROID && !UNITY_EDITOR
     public static readonly string configFolderPath = "/storage/emulated/0/Documents/MilkiPsyConfiguration";
 #else
-    public static readonly string configFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "MilkiPsyConfiguration");        
+    public static readonly string configFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "MilkiPsyConfiguration");
 #endif
     public static readonly string programFolderPath = Path.Combine(configFolderPath, "Programs");
     public static readonly string stageFolderPath = Path.Combine(configFolderPath, "Stages");

@@ -25,20 +25,6 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
     [SerializeField]
     private AudioSource audioSource;
 
-    private readonly Dictionary<string, MediaType> mediaTypeOfExtension = new Dictionary<string, MediaType>()
-    {
-        { ".png", MediaType.Image },
-        { ".jpg", MediaType.Image },
-        { ".jpeg", MediaType.Image },
-        { ".webm", MediaType.Video },
-        { ".mp4", MediaType.Video },
-        { ".wav", MediaType.Audio },
-        { ".mp3", MediaType.Audio },
-        { ".ogg", MediaType.Audio }
-    };
-
-    private enum MediaType { Invalid, Image, Video, Audio };
-
     private void Awake()
     {
         GameManager.Instance.runningStageChanged.AddListener(RunningStageChangedHandler);
@@ -51,26 +37,21 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
 
     private async void RunningStageChangedHandler(Stage runningStage)
     {
-        if (runningStage == null)
-        {
-            await StopDisplaying();
-        }
-        else
-        {
-            await Display(runningStage.Instructions);
-        }
+        await Display(runningStage?.Instructions);
     }
 
     public async Task Display(InstructionsOrFeedback instructionsOrFeedback)
     {
-        DisplayText(instructionsOrFeedback.text);
-        await DisplayMediaAsync(instructionsOrFeedback.mediaFileName);
-    }
-
-    public async Task StopDisplaying()
-    {
-        DisplayText(null);
-        await DisplayMediaAsync(null);
+        if (instructionsOrFeedback == null)
+        {
+            DisplayText(null);
+            await DisplayMediaAsync(null, MediaType.Invalid);
+        }
+        else
+        {
+            DisplayText(instructionsOrFeedback.text);
+            await DisplayMediaAsync(instructionsOrFeedback.MediaFilePath, instructionsOrFeedback.MediaType);
+        }
     }
 
     private void DisplayText(string text)
@@ -84,42 +65,32 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
         textUI.text = text;
     }
 
-    private async Task DisplayMediaAsync(string mediaFileName)
+    private async Task DisplayMediaAsync(string mediaFilePath, MediaType mediaType)
     {
-        MediaType mediaType = MediaTypeOfFile(mediaFileName);
+        bool isMediaValid = mediaType != MediaType.Unknown && mediaType != MediaType.Invalid;
+        mediaArea.SetActive(isMediaValid);
 
-        mediaArea.SetActive(mediaType != MediaType.Invalid);
+        if (!isMediaValid)
+        {
+            return;
+        }
 
         switch (mediaType)
         {
             case MediaType.Image:
-                await DisplayImageAsync(mediaFileName);
+                await DisplayImageAsync(mediaFilePath);
                 break;
             case MediaType.Video:
-                await DisplayVideoAsync(mediaFileName);
+                await DisplayVideoAsync(mediaFilePath);
                 break;
             case MediaType.Audio:
-                await DisplayAudioAsync(mediaFileName); 
+                await DisplayAudioAsync(mediaFilePath); 
                 break;
         }
     }
 
-    private MediaType MediaTypeOfFile(string path)
+    private async Task DisplayImageAsync(string imageFilePath)
     {
-        string mediaFileExtension = Path.GetExtension(path);
-
-        if (path == null)
-        {
-            return MediaType.Invalid;
-        }
-
-        mediaTypeOfExtension.TryGetValue(mediaFileExtension, out MediaType mediaType);
-        return mediaType;
-    }
-
-    private async Task DisplayImageAsync(string imageFileName)
-    {
-        string imageFilePath = Path.Combine(ConfigPaths.imageFolderPath, imageFileName);
         image.texture = await FileAccessHelper.LoadTextureAsync(imageFilePath);
         aspectRatioFitter.aspectRatio = (float)image.texture.width / image.texture.height;
         image.gameObject.SetActive(true);
@@ -127,14 +98,13 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
         audioSource.gameObject.SetActive(false);
     }
 
-    private async Task DisplayVideoAsync(string videoFileName)
+    private async Task DisplayVideoAsync(string videoFilePath)
     {
-        string videoFilePath = Path.Combine(ConfigPaths.videoFolderPath, videoFileName);
-
 #if UNITY_WSA && !UNITY_EDITOR
         // On HoloLens, VideoPlayer can't read from user storage (e.g. Documents),
         // even if the appropriate capability is declared in the manifest.
         // As a workaround, copy videos to streaming assets folder first.
+        string videoFileName = Path.GetFileName(videoFilePath);
         string copyDest = Path.Combine(Application.streamingAssetsPath, videoFileName);
         await FileAccessHelper.CopyAsync(videoFilePath, copyDest);
         videoFilePath = copyDest;
@@ -159,9 +129,8 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
         videoPlayer.Play();
     }
 
-    private async Task DisplayAudioAsync(string audioFileName)
+    private async Task DisplayAudioAsync(string audioFilePath)
     {
-        string audioFilePath = Path.Combine(ConfigPaths.audioFolderPath, audioFileName);
         audioSource.Stop();
         audioSource.clip = await FileAccessHelper.LoadAudioClipAsync(audioFilePath);
         audioSource.gameObject.SetActive(true);

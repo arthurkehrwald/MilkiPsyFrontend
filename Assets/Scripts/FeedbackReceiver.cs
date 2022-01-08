@@ -50,7 +50,7 @@ public class FeedbackReceiver : Singleton<FeedbackReceiver>
         }
 
         string filename = parsedMessage.uniqueFeedbackName + ".json";
-        string feedbackPath = Path.Combine(ConfigPaths.instructionsAndFeedbackPath);
+        string feedbackPath = Path.Combine(ConfigPaths.instructionsAndFeedbackPath, filename);
 
         try
         {

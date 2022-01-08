@@ -35,34 +35,57 @@ public class Stage
         }
     }
 
-    public static Task<Stage> CreateAsync(string fileName, Program parentProgram, int indexInParentProgram)
-    {
-        Stage stage = new Stage(fileName, parentProgram, indexInParentProgram);
-        return stage.InitializeAsync();
-    }
-
-    private Stage(string fileName, Program parentProgram, int indexInParentProgram)
+    public Stage(string fileName, Program parentProgram, int indexInParentProgram)
     {
         this.fileName = fileName;
         uniqueName = Path.GetFileNameWithoutExtension(fileName);
         this.parentProgram = parentProgram;
         this.parentProgram.runningStageChanged.AddListener(ParentProgramRunningStageChangedHandler);
         this.indexInParentProgram = indexInParentProgram;
-    }
-
-    private async Task<Stage> InitializeAsync()
-    { 
         string stagePath = Path.Combine(ConfigPaths.stageFolderPath, fileName);
-        string stageJsonText = await FileAccessHelper.LoadTextAsync(stagePath);
+        StageParseResult parseResult;
 
-        StageParseResult parseResult = JsonUtility.FromJson<StageParseResult>(stageJsonText);
+        try
+        {
+            string stageJsonText = FileAccessHelper.ReadText(stagePath);
+            parseResult = JsonUtility.FromJson<StageParseResult>(stageJsonText);
+
+            if (!parseResult.IsValid())
+            {
+                throw new Exception();
+            }
+        }
+        catch
+        {
+            string error = string.Format(DebugMessageRelay.ReadError, stagePath);
+            throw new Exception(error);
+        }
+
         DisplayName = parseResult.displayName;
         Duration = parseResult.durationSeconds;
-        string instructionsPath = Path.Combine(ConfigPaths.instructionsAndFeedbackPath, parseResult.instructionsFilename);
-        string instructionsJsonText = await FileAccessHelper.LoadTextAsync(instructionsPath);
 
-        Instructions = JsonUtility.FromJson<InstructionsOrFeedback>(instructionsJsonText);
-        return this;
+        bool hasInstructions = !string.IsNullOrWhiteSpace(parseResult.instructionsFilename);
+
+        if (hasInstructions)
+        {
+            string instructionsPath = Path.Combine(ConfigPaths.instructionsAndFeedbackPath, parseResult.instructionsFilename);
+
+            try
+            {
+                string instructionsJsonText = FileAccessHelper.ReadText(instructionsPath);
+                Instructions = JsonUtility.FromJson<InstructionsOrFeedback>(instructionsJsonText);
+
+                if (!Instructions.IsValid())
+                {
+                    throw new Exception();
+                }
+            }
+            catch
+            {
+                string error = string.Format(DebugMessageRelay.ReadError, instructionsPath);
+                throw new Exception(error);
+            }
+        }
     }
 
     private void ParentProgramRunningStageChangedHandler(Stage runningStage)
@@ -101,11 +124,20 @@ public class Stage
     }
 
     [Serializable]
-    private struct StageParseResult
+    private struct StageParseResult : IParseResult
     {
         public string displayName;
         public string instructionsFilename;
         public float durationSeconds;
-        public bool canBeCompletedByUserInput;
+
+        public bool IsValid()
+        {
+            if (string.IsNullOrWhiteSpace(displayName))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

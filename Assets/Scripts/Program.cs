@@ -74,32 +74,37 @@ public class Program
         }
     }
 
-    public static Task<Program> CreateAsync(string jsonName)
-    {
-        Program program = new Program(jsonName);
-        return program.InitializeAsync();
-    }
-
-    private Program(string fileName)
+    public Program(string fileName)
     {
         this.fileName = fileName;
         uniqueName = Path.GetFileNameWithoutExtension(fileName);
-    }
-
-    private async Task<Program> InitializeAsync()
-    {
         string jsonPath = Path.Combine(ConfigPaths.programFolderPath, fileName);
+        ProgramParseResult parseResult;
 
-        string jsonText = await FileAccessHelper.LoadTextAsync(jsonPath);
-        ProgramParseResult parseResult = JsonUtility.FromJson<ProgramParseResult>(jsonText);
+        try
+        {
+            string jsonText = FileAccessHelper.ReadText(jsonPath);
+            parseResult = JsonUtility.FromJson<ProgramParseResult>(jsonText);
+
+            if (!parseResult.IsValid())
+            {
+                throw new Exception();
+            }
+        }
+        catch
+        {
+            string error = string.Format(DebugMessageRelay.ReadError, jsonPath);
+            throw new Exception(error);
+        }
+
         DisplayName = parseResult.displayName;
         Stages = new List<Stage>(parseResult.stageFilenames.Length);
+
         for (int i = 0; i < parseResult.stageFilenames.Length; i++)
         {
-            Stage stage = await Stage.CreateAsync(parseResult.stageFilenames[i], this, i);
+            Stage stage = new Stage(parseResult.stageFilenames[i], this, i);
             Stages.Add(stage);
         }
-        return this;
     }
 
     public void StartRunning()
@@ -159,7 +164,17 @@ public class Program
 
         public bool IsValid()
         {
-            return string.IsNullOrWhiteSpace(displayName);
+            if (string.IsNullOrWhiteSpace(displayName))
+            {
+                return false;
+            }
+
+            if (stageFilenames == null)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

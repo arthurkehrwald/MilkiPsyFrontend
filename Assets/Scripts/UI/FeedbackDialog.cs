@@ -61,16 +61,8 @@ public class FeedbackDialog : MonoBehaviour
         }
         else
         {
-            bool isStageRunning = GameManager.Instance.RunningProgram?.RunningStage != null;
-            if (isStageRunning)
-            {
-                InstructionsOrFeedback currentInstructions = GameManager.Instance.RunningProgram.RunningStage.Instructions;
-                await feedbackDisplay.Display(currentInstructions);
-            }
-            else
-            {
-                await feedbackDisplay.StopDisplaying();
-            }
+            InstructionsOrFeedback currentInstructions = GameManager.Instance.RunningProgram?.RunningStage?.Instructions;
+            await feedbackDisplay.Display(currentInstructions);
         }
     }
 

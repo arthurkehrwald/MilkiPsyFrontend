@@ -37,7 +37,14 @@ public class GameManager : Singleton<GameManager>
     private async void Start()
     {
         //ParseAllPrograms();
-        RunningProgram = await Program.CreateAsync("example_program.json");
+        try
+        {
+            RunningProgram = new Program("example_program.json");
+        }
+        catch (Exception e)
+        {
+            DebugMessageRelay.Instance.RelayMessage(e.Message, DebugMessageType.Error);
+        }
     }
 
     private void Update()
