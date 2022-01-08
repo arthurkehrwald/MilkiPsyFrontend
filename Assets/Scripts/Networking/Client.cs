@@ -103,7 +103,7 @@ public class Client : Singleton<Client>
 
     private ServerAddress ParseConnectionConfig()
     {
-        string path = ConfigPaths.Instance.ServerAddressPath;
+        string path = ConfigPaths.serverAddressPath;
 
         try
         {

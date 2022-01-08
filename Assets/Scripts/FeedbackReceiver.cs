@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -48,7 +49,8 @@ public class FeedbackReceiver : Singleton<FeedbackReceiver>
             return;
         }
 
-        string feedbackPath = ConfigPaths.Instance.InstructionsAndFeedbackPath + "/" + parsedMessage.uniqueFeedbackName + ".json";
+        string filename = parsedMessage.uniqueFeedbackName + ".json";
+        string feedbackPath = Path.Combine(ConfigPaths.instructionsAndFeedbackPath);
 
         try
         {

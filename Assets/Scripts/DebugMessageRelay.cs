@@ -37,7 +37,7 @@ public class DebugMessageRelay : Singleton<DebugMessageRelay>
 
     private LoggingSettings ParseLoggingSettings()
     {
-        string path = ConfigPaths.Instance.LoggingSettingsPath;
+        string path = ConfigPaths.loggingSettingsPath;
 
         try
         {

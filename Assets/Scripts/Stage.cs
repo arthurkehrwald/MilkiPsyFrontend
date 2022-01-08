@@ -52,13 +52,13 @@ public class Stage
 
     private async Task<Stage> InitializeAsync()
     { 
-        string stagePath = ConfigPaths.Instance.StageFolderPath + "/" + fileName;
+        string stagePath = Path.Combine(ConfigPaths.stageFolderPath, fileName);
         string stageJsonText = await FileAccessHelper.LoadTextAsync(stagePath);
 
         StageParseResult parseResult = JsonUtility.FromJson<StageParseResult>(stageJsonText);
         DisplayName = parseResult.displayName;
         Duration = parseResult.durationSeconds;
-        string instructionsPath = ConfigPaths.Instance.InstructionsAndFeedbackPath + "/" + parseResult.instructionsFilename;
+        string instructionsPath = Path.Combine(ConfigPaths.instructionsAndFeedbackPath, parseResult.instructionsFilename);
         string instructionsJsonText = await FileAccessHelper.LoadTextAsync(instructionsPath);
 
         Instructions = JsonUtility.FromJson<InstructionsOrFeedback>(instructionsJsonText);

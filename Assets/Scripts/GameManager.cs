@@ -62,7 +62,7 @@ public class GameManager : Singleton<GameManager>
 
     private void ParseAllPrograms()
     {
-        string path = ConfigPaths.Instance.ProgramFolderPath;
+        string path = ConfigPaths.programFolderPath;
         DirectoryInfo dataDir = new DirectoryInfo(path);
 
         try

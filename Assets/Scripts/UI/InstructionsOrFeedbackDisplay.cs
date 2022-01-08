@@ -119,7 +119,7 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
 
     private async Task DisplayImageAsync(string imageFileName)
     {
-        string imageFilePath = ConfigPaths.Instance.ImageFolderPath + "/" + imageFileName;
+        string imageFilePath = Path.Combine(ConfigPaths.imageFolderPath, imageFileName);
         image.texture = await FileAccessHelper.LoadTextureAsync(imageFilePath);
         aspectRatioFitter.aspectRatio = (float)image.texture.width / image.texture.height;
         image.gameObject.SetActive(true);
@@ -129,13 +129,13 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
 
     private async Task DisplayVideoAsync(string videoFileName)
     {
-        string videoFilePath = ConfigPaths.Instance.VideoFolderPath + "/" + videoFileName;
+        string videoFilePath = Path.Combine(ConfigPaths.videoFolderPath, videoFileName);
 
 #if UNITY_WSA && !UNITY_EDITOR
         // On HoloLens, VideoPlayer can't read from user storage (e.g. Documents),
         // even if the appropriate capability is declared in the manifest.
         // As a workaround, copy videos to streaming assets folder first.
-        string copyDest = Application.streamingAssetsPath + "/" + videoFileName;
+        string copyDest = Path.Combine(Application.streamingAssetsPath, videoFileName);
         await FileAccessHelper.CopyAsync(videoFilePath, copyDest);
         videoFilePath = copyDest;
 #endif
@@ -161,7 +161,7 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
 
     private async Task DisplayAudioAsync(string audioFileName)
     {
-        string audioFilePath = ConfigPaths.Instance.AudioFolderPath + "/" + audioFileName;
+        string audioFilePath = Path.Combine(ConfigPaths.audioFolderPath, audioFileName);
         audioSource.Stop();
         audioSource.clip = await FileAccessHelper.LoadAudioClipAsync(audioFilePath);
         audioSource.gameObject.SetActive(true);
