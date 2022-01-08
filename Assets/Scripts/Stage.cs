@@ -109,10 +109,3 @@ public class Stage
         public bool canBeCompletedByUserInput;
     }
 }
-
-[Serializable]
-public struct InstructionsOrFeedback
-{
-    public string mediaFileName;
-    public string text;
-}

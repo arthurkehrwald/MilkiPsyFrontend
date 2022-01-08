@@ -30,6 +30,16 @@ public class FeedbackDialog : MonoBehaviour
 
     private async void ReceivedFeedbackHandler(InstructionsOrFeedback feedback, bool goToNextStage)
     {
+        if (feedback == null)
+        {
+            if (goToNextStage)
+            {
+                GameManager.Instance.GoToNextStage();
+            }
+
+            return;
+        }
+
         await feedbackDisplay.Display(feedback);
         goNextStageWhenUserAccepts = goToNextStage;
         hasUserAcceptedFeedback = false;

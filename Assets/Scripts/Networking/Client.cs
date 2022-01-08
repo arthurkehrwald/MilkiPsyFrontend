@@ -236,8 +236,8 @@ public class Client : Singleton<Client>
             {
                 using Packet packet = new Packet(packetBytes);
                 string message = packet.ReadString();
-                receivedMessage?.Invoke(message);
                 Debug.Log($"[Client] Received message from server: {message}");
+                receivedMessage?.Invoke(message);
             });
 
             packetLength = 0;
