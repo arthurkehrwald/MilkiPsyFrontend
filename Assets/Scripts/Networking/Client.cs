@@ -62,7 +62,7 @@ public class Client : Singleton<Client>
     {
         if (!IsConnected)
         {
-            Debug.LogError("[Client] Cannot send message to server because it is not connected");
+            Debug.LogError("[Client] Cannot send message to server because there is no connection");
             return;
         }
 
@@ -103,9 +103,7 @@ public class Client : Singleton<Client>
 
     private ConnectionConfig ParseConnectionConfig()
     {
-        FileInfo fileInfo = new FileInfo(ConfigPaths.Instance.ServerAddressPath);
-        using StreamReader reader = fileInfo.OpenText();
-        string text = reader.ReadToEnd();
+        string text = FileAccessHelper.ReadText(ConfigPaths.Instance.ServerAddressPath);
         ConnectionConfig config = JsonUtility.FromJson<ConnectionConfig>(text);
         return config;
     }

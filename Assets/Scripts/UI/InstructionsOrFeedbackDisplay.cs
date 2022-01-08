@@ -41,17 +41,37 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
 
     private void Awake()
     {
-        GameManager.Instance.runningStageChanged.AddListener(OnRunningStageChanged);
+        GameManager.Instance.runningStageChanged.AddListener(RunningStageChangedHandler);
     }
 
-    private async void OnRunningStageChanged(Stage runningStage)
+    private void OnDestroy()
     {
-        string text = runningStage?.Instructions.text;
-        string mediaFileName = runningStage?.Instructions.mediaFileName;
-        DisplayText(text);
-        await DisplayMediaAsync(mediaFileName);
+        GameManager.Instance?.runningStageChanged.RemoveListener(RunningStageChangedHandler);
     }
 
+    private async void RunningStageChangedHandler(Stage runningStage)
+    {
+        if (runningStage == null)
+        {
+            await StopDisplaying();
+        }
+        else
+        {
+            await Display(runningStage.Instructions);
+        }
+    }
+
+    public async Task Display(InstructionsOrFeedback instructionsOrFeedback)
+    {
+        DisplayText(instructionsOrFeedback.text);
+        await DisplayMediaAsync(instructionsOrFeedback.mediaFileName);
+    }
+
+    public async Task StopDisplaying()
+    {
+        DisplayText(null);
+        await DisplayMediaAsync(null);
+    }
 
     private void DisplayText(string text)
     {

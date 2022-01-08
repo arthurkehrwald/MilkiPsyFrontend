@@ -111,7 +111,7 @@ public class Program
         RunningStage?.UpdateRunning();
     }
 
-    public void OnUiGoToPrevStage()
+    public void GoToPrevStage()
     {
         if (RunningStage != null)
         {
@@ -119,7 +119,7 @@ public class Program
         }
     }
 
-    public void OnUiGoToNextStage()
+    public void GoToNextStage()
     {
         if (RunningStage == null)
         {

@@ -35,12 +35,12 @@ public class StageProgressBar : MonoBehaviour
         return bar;
     }
 
-    private void OnEnable()
+    private void Awake()
     {     
         associatedStage?.stateChanged.AddListener(OnAssociatedStageStateChanged);
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         associatedStage?.stateChanged.RemoveListener(OnAssociatedStageStateChanged);
     }

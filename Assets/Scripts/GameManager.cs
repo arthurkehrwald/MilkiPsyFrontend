@@ -26,10 +26,10 @@ public class GameManager : Singleton<GameManager>
                 return;
             }
          
-            runningProgram?.runningStageChanged.RemoveListener(OnRunningProgramStageChanged);
+            runningProgram?.runningStageChanged.RemoveListener(RunningProgramStageChangedHandler);
             runningProgram = value;
             runningProgramChanged?.Invoke(runningProgram);
-            runningProgram?.runningStageChanged.AddListener(OnRunningProgramStageChanged);
+            runningProgram?.runningStageChanged.AddListener(RunningProgramStageChangedHandler);
             runningProgram?.StartRunning();
         }
     }
@@ -45,19 +45,19 @@ public class GameManager : Singleton<GameManager>
         RunningProgram?.UpdateRunning();
     }
 
-    private void OnRunningProgramStageChanged(Stage runningStage)
+    private void RunningProgramStageChangedHandler(Stage runningStage)
     {
         runningStageChanged?.Invoke(runningStage);
     }
 
-    public void OnUiGoToPrevStage()
+    public void GoToPrevStage()
     {
-        RunningProgram?.OnUiGoToPrevStage();
+        RunningProgram?.GoToPrevStage();
     }
 
-    public void OnUiGoToNextStage()
+    public void GoToNextStage()
     {
-        RunningProgram?.OnUiGoToNextStage();
+        RunningProgram?.GoToNextStage();
     }
 
     private void ParseAllPrograms()

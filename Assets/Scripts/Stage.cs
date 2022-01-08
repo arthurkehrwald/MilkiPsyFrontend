@@ -46,7 +46,7 @@ public class Stage
         this.fileName = fileName;
         uniqueName = Path.GetFileNameWithoutExtension(fileName);
         this.parentProgram = parentProgram;
-        this.parentProgram.runningStageChanged.AddListener(OnParentProgramRunningStageChanged);
+        this.parentProgram.runningStageChanged.AddListener(ParentProgramRunningStageChangedHandler);
         this.indexInParentProgram = indexInParentProgram;
     }
 
@@ -65,7 +65,7 @@ public class Stage
         return this;
     }
 
-    private void OnParentProgramRunningStageChanged(Stage runningStage)
+    private void ParentProgramRunningStageChangedHandler(Stage runningStage)
     {
         if (runningStage == null)
         {

@@ -160,6 +160,14 @@ static class FileAccessHelper
         return text;
     }
 
+    public static string ReadText(string path)
+    {
+        FileInfo fileInfo = new FileInfo(path);
+        using StreamReader reader = fileInfo.OpenText();
+        string text = reader.ReadToEnd();
+        return text;
+    }
+
     public static async Task CopyAsync(string sourcePath, string destPath)
     {
         sourcePath = AddFilePrefixIfNeeded(sourcePath);
