@@ -48,25 +48,39 @@ public class FeedbackReceiver : Singleton<FeedbackReceiver>
             return;
         }
 
+        string feedbackPath = ConfigPaths.Instance.InstructionsAndFeedbackPath + "/" + parsedMessage.uniqueFeedbackName + ".json";
+
         try
         {
-            string feedbackPath = ConfigPaths.Instance.InstructionsAndFeedbackPath + "/" + parsedMessage.uniqueFeedbackName + ".json";
             string feedbackJson = FileAccessHelper.ReadText(feedbackPath);
             InstructionsOrFeedback feedback = JsonUtility.FromJson<InstructionsOrFeedback>(feedbackJson);
+            
+            if (!feedback.IsValid())
+            {
+                throw new Exception();
+            }
+
             receveivedFeedback?.Invoke(feedback, parsedMessage.goToNextStage);
         }
         catch (Exception e)
         {
+            string error = string.Format(DebugMessageRelay.ReadError, feedbackPath);
+            DebugMessageRelay.Instance.RelayMessage(error, DebugMessageType.Error);
             Debug.LogError("[FeedbackReceiver] Error reading feedback file " +
                 "referenced in message from server: " + e.Message);
         }
     }
 
     [Serializable]
-    private struct FeedbackMessage
+    private struct FeedbackMessage : IParseResult
     {
         public State currentState;
         public bool goToNextStage;
         public string uniqueFeedbackName;
+
+        public bool IsValid()
+        {
+            return currentState.IsValid();
+        }
     }
 }

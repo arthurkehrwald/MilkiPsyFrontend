@@ -12,6 +12,7 @@ public class ConfigPaths : Singleton<ConfigPaths>
     public string VideoFolderPath { get; private set; }
     public string AudioFolderPath { get; private set; }
     public string ServerAddressPath { get; private set; }
+    public string LoggingSettingsPath { get; private set; }
 
     private void Awake()
     {
@@ -29,5 +30,6 @@ public class ConfigPaths : Singleton<ConfigPaths>
         VideoFolderPath = MediaFolderPath + "/Videos";
         AudioFolderPath = MediaFolderPath + "/Audio";
         ServerAddressPath = ConfigFolderPath + "/ServerAddress.json";
+        LoggingSettingsPath = ConfigFolderPath + "/LoggingSettings.json";
     }
 }

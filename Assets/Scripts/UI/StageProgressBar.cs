@@ -19,30 +19,30 @@ public class StageProgressBar : MonoBehaviour
     [SerializeField]
     private LayoutElement layoutElement;
 
-    public Stage associatedStage;
+    public Stage AssociatedStage
+    {
+        get => associatedStage;
+        set
+        {
+            associatedStage?.stateChanged.RemoveListener(OnAssociatedStageStateChanged);
+            associatedStage = value;
+            associatedStage.stateChanged.AddListener(OnAssociatedStageStateChanged);
+        }        
+    }
 
+    private Stage associatedStage;
     private float notRunningHeight;
     private float runningHeight;
 
-    public static StageProgressBar Instantiate(StageProgressBar prefab, RectTransform parent, Stage associatedStage)
-    {
-        GameObject gameObj = Instantiate(prefab.gameObject, parent);
-        StageProgressBar bar = gameObj.GetComponent<StageProgressBar>();
-        bar.notRunningHeight = bar.layoutElement.preferredHeight;
-        bar.runningHeight = bar.notRunningHeight * bar.runningHeightMult;
-        bar.associatedStage = associatedStage;
-        bar.associatedStage.stateChanged.AddListener(bar.OnAssociatedStageStateChanged);
-        return bar;
-    }
-
     private void Awake()
-    {     
-        associatedStage?.stateChanged.AddListener(OnAssociatedStageStateChanged);
+    {
+        notRunningHeight = layoutElement.preferredHeight;
+        runningHeight = notRunningHeight * runningHeightMult;
     }
 
     private void OnDestroy()
     {
-        associatedStage?.stateChanged.RemoveListener(OnAssociatedStageStateChanged);
+        AssociatedStage?.stateChanged.RemoveListener(OnAssociatedStageStateChanged);
     }
 
     private void OnAssociatedStageStateChanged(StageState state)

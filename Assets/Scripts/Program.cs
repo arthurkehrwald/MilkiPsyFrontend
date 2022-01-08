@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -88,8 +89,8 @@ public class Program
     private async Task<Program> InitializeAsync()
     {
         string jsonPath = ConfigPaths.Instance.ProgramFolderPath + "/" + fileName;
-        string jsonText = await FileAccessHelper.LoadTextAsync(jsonPath);
 
+        string jsonText = await FileAccessHelper.LoadTextAsync(jsonPath);
         ProgramParseResult parseResult = JsonUtility.FromJson<ProgramParseResult>(jsonText);
         DisplayName = parseResult.displayName;
         Stages = new List<Stage>(parseResult.stageFilenames.Length);
@@ -150,10 +151,15 @@ public class Program
         }
     }
 
-    [System.Serializable]
-    private struct ProgramParseResult
+    [Serializable]
+    private struct ProgramParseResult : IParseResult
     {
         public string displayName;
         public string[] stageFilenames;
+
+        public bool IsValid()
+        {
+            return string.IsNullOrWhiteSpace(displayName);
+        }
     }
 }

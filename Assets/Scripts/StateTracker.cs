@@ -19,7 +19,11 @@ public class StateTracker : Singleton<StateTracker>
         }
     }
 
-    private State state;
+    private State state = new State
+    {
+        uniqueProgramName = "none",
+        uniqueStageName = "none"
+    };
 
     private void Awake()
     {

@@ -59,7 +59,7 @@ public class Client : Singleton<Client>
     private int serverPort;
 
     public void SendMessageToServer(string message)
-    {
+    { 
         if (!IsConnected)
         {
             Debug.LogError("[Client] Cannot send message to server because there is no connection");
@@ -83,7 +83,7 @@ public class Client : Singleton<Client>
 
     private async void Start()
     {
-        ConnectionConfig config = ParseConnectionConfig();
+        ServerAddress config = ParseConnectionConfig();
         serverIp = config.ip;
         serverPort = config.port;
         await ConnectToServerAsync(serverIp, serverPort, connectCancellation.Token);
@@ -101,11 +101,33 @@ public class Client : Singleton<Client>
         }
     }
 
-    private ConnectionConfig ParseConnectionConfig()
+    private ServerAddress ParseConnectionConfig()
     {
-        string text = FileAccessHelper.ReadText(ConfigPaths.Instance.ServerAddressPath);
-        ConnectionConfig config = JsonUtility.FromJson<ConnectionConfig>(text);
-        return config;
+        string path = ConfigPaths.Instance.ServerAddressPath;
+
+        try
+        {
+            string text = FileAccessHelper.ReadText(path);
+            ServerAddress config = JsonUtility.FromJson<ServerAddress>(text);
+
+            if (!config.IsValid())
+            {
+                throw new Exception();
+            }
+
+            return config;
+        }
+        catch (Exception)
+        {
+            string error = string.Format(DebugMessageRelay.ReadError, path);
+            DebugMessageRelay.Instance.RelayMessage(error, DebugMessageType.Error);
+        }
+
+        return new ServerAddress
+        {
+            ip = "127.0.0.1",
+            port = 13000
+        };
     }
 
     private async Task ConnectToServerAsync(string ip, int port, CancellationToken cancellationToken)
@@ -256,9 +278,24 @@ public class Client : Singleton<Client>
     }
 
     [Serializable]
-    private struct ConnectionConfig
+    private struct ServerAddress : IParseResult
     {
         public string ip;
         public int port;
+
+        public bool IsValid()
+        {
+            if (string.IsNullOrWhiteSpace(ip))
+            {
+                return false;
+            }
+
+            if (port == 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
