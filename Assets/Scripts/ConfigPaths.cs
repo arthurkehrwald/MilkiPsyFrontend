@@ -11,6 +11,7 @@ public static class ConfigPaths
     public static readonly string programFolderPath = Path.Combine(configFolderPath, "Programs");
     public static readonly string stageFolderPath = Path.Combine(configFolderPath, "Stages");
     public static readonly string instructionsAndFeedbackPath = Path.Combine(configFolderPath, "InstructionsAndFeedback");
+    public static readonly string popupMessagesFolderPath = Path.Combine(configFolderPath, "PopupMessages");
     public static readonly string mediaFolderPath = Path.Combine(configFolderPath, "Media");
     public static readonly string imageFolderPath = Path.Combine(mediaFolderPath, "Images");
     public static readonly string videoFolderPath = Path.Combine(mediaFolderPath, "Videos");

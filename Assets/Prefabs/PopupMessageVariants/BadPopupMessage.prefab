@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &5316148909651157660
+--- !u!1001 &7953679028302205893
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1715951521324273725, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
       propertyPath: m_Name
-      value: DebugInfoPopupMessage
+      value: BadPopupMessage
       objectReference: {fileID: 0}
     - target: {fileID: 2094319091856564851, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
       propertyPath: m_Pivot.x
@@ -95,9 +95,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3599620931724776335, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
-      propertyPath: lifetime
-      value: 10
+    - target: {fileID: 4415561079943622087, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
+      propertyPath: m_Color.b
+      value: 0.2742079
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415561079943622087, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
+      propertyPath: m_Color.g
+      value: 0.28790864
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415561079943622087, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
+      propertyPath: m_Color.r
+      value: 0.735849
       objectReference: {fileID: 0}
     - target: {fileID: 4694796292188298619, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
       propertyPath: m_AnchorMax.y
@@ -142,10 +150,6 @@ PrefabInstance:
     - target: {fileID: 5314960300025784629, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6499627923310963587, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
-      propertyPath: m_text
-      value: Debug Info Message
       objectReference: {fileID: 0}
     - target: {fileID: 8417574244240422823, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
       propertyPath: m_AnchorMax.y

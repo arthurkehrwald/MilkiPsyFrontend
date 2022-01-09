@@ -97,7 +97,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3599620931724776335, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
       propertyPath: lifetime
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4415561079943622087, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
       propertyPath: m_Color.b

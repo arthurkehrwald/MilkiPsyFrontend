@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 1224646697240131000}
   - component: {fileID: 1224646697240131002}
   - component: {fileID: 1224646697240131013}
-  - component: {fileID: 575499893485193582}
+  - component: {fileID: 6274741019532978722}
   - component: {fileID: 1151221495573024081}
   m_Layer: 5
   m_Name: InstructionsOrFeedback
@@ -177,7 +177,7 @@ MonoBehaviour:
   videoImage: {fileID: 5203685114415729530}
   videoPlayer: {fileID: 5399863340253043393}
   audioSource: {fileID: 1280727364209398796}
---- !u!114 &575499893485193582
+--- !u!114 &6274741019532978722
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,7 +186,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1224646697240131001}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f559e071d925c240844109dd0e2d151, type: 3}
+  m_Script: {fileID: 11500000, guid: 548e1ac80ae01084d9c8c9472afa327a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   feedbackDisplay: {fileID: 1224646697240131013}

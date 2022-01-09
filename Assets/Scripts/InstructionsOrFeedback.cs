@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using UnityEngine;
 
 public enum MediaType { Unknown, Invalid, Image, Video, Audio };
 
@@ -71,6 +72,30 @@ public class InstructionsOrFeedback : IParseResult
         { ".mp3", MediaType.Audio },
         { ".ogg", MediaType.Audio }
     };
+
+    public static InstructionsOrFeedback ParseFromJson(string jsonFilename)
+    {
+        string instructionsPath = Path.Combine(ConfigPaths.instructionsAndFeedbackPath, jsonFilename);
+        InstructionsOrFeedback ret;
+
+        try
+        {
+            string instructionsJsonText = FileAccessHelper.ReadText(instructionsPath);
+            ret = JsonUtility.FromJson<InstructionsOrFeedback>(instructionsJsonText);
+
+            if (!ret.IsValid())
+            {
+                throw new Exception();
+            }
+        }
+        catch
+        {
+            string error = string.Format(DebugMessageRelay.FileError, instructionsPath);
+            throw new Exception(error);
+        }
+
+        return ret;
+    }
 
     public bool IsValid()
     {

@@ -1197,6 +1197,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1508284735157929901}
   - component: {fileID: 3939793035313422836}
+  - component: {fileID: 2095163336646181448}
   m_Layer: 5
   m_Name: PopupMessages
   m_TagString: Untagged
@@ -1239,6 +1240,22 @@ MonoBehaviour:
   debugInfoMessagePrefab: {fileID: 8661175721702617363, guid: e545245535763b0408dca935d8938a92, type: 3}
   debugErrorMessagePrefab: {fileID: 7496732471742430721, guid: 3d0e4b1637b60a4499c77a4edbf75b05, type: 3}
   spawnedMessagesParent: {fileID: 3143445236015904760}
+--- !u!114 &2095163336646181448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8166179141693366876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbd3e4936d95baf45a9ed0332162ec99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnedMessagesParent: {fileID: 3143445236015904760}
+  goodPopupPrefab: {fileID: 6887491219885736010, guid: 91d1d801948adf14fae9b562f109d482, type: 3}
+  badPopupPrefab: {fileID: 6887491219885736010, guid: 97bde0eb3a6c71045ad58a452d5b5f14, type: 3}
+  neutralPopupPrefab: {fileID: 6887491219885736010, guid: 331079d3bd968e1419c54704bb1c83dd, type: 3}
 --- !u!1001 &678437595096128740
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1714,7 +1731,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6428403616794604849, guid: 44127dc4596fe4340831256fbfd4e67a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -391.59
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7162252585817813157, guid: 44127dc4596fe4340831256fbfd4e67a, type: 3}
       propertyPath: m_AnchorMax.y

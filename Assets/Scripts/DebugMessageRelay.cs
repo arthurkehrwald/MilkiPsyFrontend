@@ -7,7 +7,8 @@ using UnityEngine.Events;
 public enum DebugMessageType { Info, Error };
 public class DebugMessageRelay : Singleton<DebugMessageRelay>
 {
-    public const string ReadError = "Failed to read or parse file '{0}'";
+    public const string FileError = "Failed to read or parse file '{0}'";
+    public const string MessageError = "Failed to process message from server '{0}' of type '{1}'";
 
     private HashSet<IDebugMessageHandler> handlers = new HashSet<IDebugMessageHandler>();
     private LoggingSettings settings;
@@ -53,7 +54,7 @@ public class DebugMessageRelay : Singleton<DebugMessageRelay>
         }
         catch (Exception)
         {
-            string error = string.Format(ReadError, path);
+            string error = string.Format(FileError, path);
             RelayMessage(error, DebugMessageType.Error);
             return default;
         }

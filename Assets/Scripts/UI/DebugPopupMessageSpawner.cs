@@ -32,12 +32,12 @@ public class DebugPopupMessageSpawner : MonoBehaviour, IDebugMessageHandler
         spawnedMessage.Text = message;
     }
 
-    private void Awake()
+    private void OnEnable()
     {
         DebugMessageRelay.Instance.RegisterHandler(this);
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         DebugMessageRelay.Instance?.UnregisterHandler(this);
     }

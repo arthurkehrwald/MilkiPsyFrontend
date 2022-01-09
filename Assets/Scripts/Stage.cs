@@ -57,7 +57,7 @@ public class Stage
         }
         catch
         {
-            string error = string.Format(DebugMessageRelay.ReadError, stagePath);
+            string error = string.Format(DebugMessageRelay.FileError, stagePath);
             throw new Exception(error);
         }
 
@@ -68,23 +68,10 @@ public class Stage
 
         if (hasInstructions)
         {
-            string instructionsPath = Path.Combine(ConfigPaths.instructionsAndFeedbackPath, parseResult.instructionsFilename);
-
-            try
-            {
-                string instructionsJsonText = FileAccessHelper.ReadText(instructionsPath);
-                Instructions = JsonUtility.FromJson<InstructionsOrFeedback>(instructionsJsonText);
-
-                if (!Instructions.IsValid())
-                {
-                    throw new Exception();
-                }
-            }
-            catch
-            {
-                string error = string.Format(DebugMessageRelay.ReadError, instructionsPath);
-                throw new Exception(error);
-            }
+            // If parse fails, an exception will be thrown that
+            // will travel all the way back up the stack to where
+            // the parent program constructor was called
+            Instructions = InstructionsOrFeedback.ParseFromJson(parseResult.instructionsFilename);
         }
     }
 

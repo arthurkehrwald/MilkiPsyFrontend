@@ -50,7 +50,7 @@ public class Program
     public int RunningStageIndex
     {
         get => runningStageIndex;
-        private set
+        set
         {
             if (value == runningStageIndex)
             {
@@ -93,7 +93,7 @@ public class Program
         }
         catch
         {
-            string error = string.Format(DebugMessageRelay.ReadError, jsonPath);
+            string error = string.Format(DebugMessageRelay.FileError, jsonPath);
             throw new Exception(error);
         }
 

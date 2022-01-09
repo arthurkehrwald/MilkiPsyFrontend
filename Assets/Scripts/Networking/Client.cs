@@ -3,8 +3,11 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+
+public enum ReceivedMessageType { Invalid, Feedback, Popup, ChangeStage };
 
 public class Client : Singleton<Client>
 {
@@ -57,6 +60,7 @@ public class Client : Singleton<Client>
     private CancellationTokenSource connectCancellation = new CancellationTokenSource();
     private string serverIp;
     private int serverPort;
+    private Dictionary<ReceivedMessageType, HashSet<IReceivedMessageHandler>> receivedMessageHandlers = new Dictionary<ReceivedMessageType, HashSet<IReceivedMessageHandler>>();
 
     public void SendMessageToServer(string message)
     { 
@@ -79,6 +83,26 @@ public class Client : Singleton<Client>
         {
             Debug.LogError($"[Client] Error sending message to server: {e.Message}");
         }
+    }
+
+    public bool TryRegisterReceivedMessageHandler(IReceivedMessageHandler handler, ReceivedMessageType messageType)
+    {       
+        if (!receivedMessageHandlers.ContainsKey(messageType))
+        {
+            receivedMessageHandlers[messageType] = new HashSet<IReceivedMessageHandler>();
+        }
+
+        return receivedMessageHandlers[messageType].Add(handler);
+    }
+
+    public bool TryUnregisterReceivedMessageHandler(IReceivedMessageHandler handler, ReceivedMessageType messageType)
+    {
+        if (receivedMessageHandlers[messageType] == null)
+        {
+            return false;
+        }
+
+        return receivedMessageHandlers[messageType].Remove(handler);
     }
 
     private async void Start()
@@ -119,7 +143,7 @@ public class Client : Singleton<Client>
         }
         catch (Exception)
         {
-            string error = string.Format(DebugMessageRelay.ReadError, path);
+            string error = string.Format(DebugMessageRelay.FileError, path);
             DebugMessageRelay.Instance.RelayMessage(error, DebugMessageType.Error);
         }
 
@@ -224,7 +248,7 @@ public class Client : Singleton<Client>
             byte[] receivedBytes = new byte[receivedByteCount];
             Array.Copy(receiveBuffer, receivedBytes, receivedBytes.Length);
 
-            bool wasAllPacketDataParsed = ParsePacketData(receivedBytes);
+            bool wasAllPacketDataParsed = ExtractPackets(receivedBytes);
             receivedPacket.Reset(wasAllPacketDataParsed);
 
             stream.BeginRead(receiveBuffer, 0, ReceiveBufferSize, ReceiveCallback, null);
@@ -236,7 +260,7 @@ public class Client : Singleton<Client>
         }
     }
 
-    private bool ParsePacketData(byte[] data)
+    private bool ExtractPackets(byte[] data)
     {
         int packetLength = 0;
 
@@ -254,12 +278,11 @@ public class Client : Singleton<Client>
         while (packetLength > 0 && packetLength <= receivedPacket.UnreadLength())
         {
             byte[] packetBytes = receivedPacket.ReadBytes(packetLength);
+
             MainThreadScheduler.ScheduleAction(() =>
             {
                 using Packet packet = new Packet(packetBytes);
-                string message = packet.ReadString();
-                Debug.Log($"[Client] Received message from server: {message}");
-                receivedMessage?.Invoke(message);
+                ParsePacket(packet);
             });
 
             packetLength = 0;
@@ -277,6 +300,64 @@ public class Client : Singleton<Client>
         return packetLength <= 1;
     }
 
+    private void ParsePacket(Packet packet)
+    {
+        string metaDataJson = packet.ReadString();
+        string messageJson = packet.ReadString();
+
+        MessageMetaData metaData;
+
+        try
+        {
+            metaData = JsonUtility.FromJson<MessageMetaData>(metaDataJson);
+
+            if (!metaData.IsValid())
+            {
+                throw new Exception();
+            }
+        }
+        catch (Exception)
+        {
+            string error = string.Format(DebugMessageRelay.MessageError, metaDataJson, "MetaData");
+            DebugMessageRelay.Instance.RelayMessage(error, DebugMessageType.Error);
+            Debug.LogError("[FeedbackReceiver] Failed to parse message from server");
+            return;
+        }
+
+
+        if (metaData.ignoreMessageIfStateOutdated)
+        {
+            bool isUpToDate = metaData.currentState == StateTracker.Instance.State;
+            if (!isUpToDate)
+            {
+                string msg = "Received outdated message from server. Ignoring";
+                DebugMessageRelay.Instance.RelayMessage(msg, DebugMessageType.Info);
+                Debug.Log("[FeedbackReceiver] Received outdated message from server. Ignoring");
+                return;
+            }
+        }
+
+        HashSet<IReceivedMessageHandler> handlers;
+
+        bool isAnyHandlerRegistered = receivedMessageHandlers.TryGetValue(metaData.type, out handlers)
+            && handlers.Count > 0;
+
+        if (!isAnyHandlerRegistered)
+        {
+            string nameOfMsgType = metaData.type.ToString();
+            string info = $"No response is currently defined for messages of type '{nameOfMsgType}'";
+            DebugMessageRelay.Instance.RelayMessage(info, DebugMessageType.Info);
+            Debug.Log($"[Client] No handlers registered for message " +
+                $"'{messageJson}' of type '{nameOfMsgType}");
+            return;
+        }
+
+        foreach (IReceivedMessageHandler handler in handlers)
+        {
+            handler.Handle(messageJson);
+        }
+    }
+
     [Serializable]
     private struct ServerAddress : IParseResult
     {
@@ -291,6 +372,29 @@ public class Client : Singleton<Client>
             }
 
             if (port == 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    [Serializable]
+    private struct MessageMetaData : IParseResult
+    {
+        public ReceivedMessageType type;
+        public State currentState;
+        public bool ignoreMessageIfStateOutdated;
+
+        public bool IsValid()
+        {
+            if (type == ReceivedMessageType.Invalid)
+            {
+                return false;
+            }
+
+            if (!currentState.IsValid())
             {
                 return false;
             }
