@@ -18,7 +18,11 @@ public class StageNameText : MonoBehaviour
         bool isStageRunning = runningStage != null;
         nameText.gameObject.SetActive(isStageRunning);
 
-        if (runningStage != null)
+        if (runningStage == null)
+        {
+            nameText.text = "Program complete!";
+        }
+        else
         {
             nameText.text = runningStage.DisplayName;
         }

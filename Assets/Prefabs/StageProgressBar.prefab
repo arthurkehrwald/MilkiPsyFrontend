@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 981049449358877346}
   - component: {fileID: 4592698306103586331}
   - component: {fileID: 5888013360582402450}
-  - component: {fileID: 5617645865907268597}
   - component: {fileID: 1956482362553035185}
   m_Layer: 5
   m_Name: StageProgressBar
@@ -74,26 +73,6 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &5617645865907268597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2286715849309978746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: 25
-  m_MinHeight: 25
-  m_PreferredWidth: -1
-  m_PreferredHeight: 25
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: 0
-  m_LayoutPriority: 1
 --- !u!114 &1956482362553035185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,6 +88,5 @@ MonoBehaviour:
   incompleteColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
   runningColor: {r: 0.5882353, g: 0.9843138, b: 0.98823535, a: 1}
   completeColor: {r: 0.505162, g: 0.8270021, b: 0.8301887, a: 1}
-  runningHeightMult: 1
   rawImage: {fileID: 5888013360582402450}
-  layoutElement: {fileID: 5617645865907268597}
+  layoutElement: {fileID: 0}

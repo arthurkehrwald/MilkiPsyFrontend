@@ -11,18 +11,11 @@ public class ConnectionStatusDisplay : MonoBehaviour
     [SerializeField]
     private string connectedText = "Connected to Server";
     [SerializeField]
-    private Color notConnectedColor;
-    [SerializeField]
-    private Color connectedColor;
-    [SerializeField]
     private TextMeshProUGUI text;
-    [SerializeField]
-    private RawImage background;
 
     private void Awake()
     {
         text.text = notConnectedText;
-        background.color = notConnectedColor;
         Client.Instance.connected.AddListener(ConnectedToServerHandler);
         Client.Instance.disconnected.AddListener(DisconnectedFromServerHandler);
     }
@@ -36,12 +29,10 @@ public class ConnectionStatusDisplay : MonoBehaviour
     private void ConnectedToServerHandler()
     {
         text.text = connectedText;
-        background.color = connectedColor;
     }
 
     private void DisconnectedFromServerHandler()
     {
         text.text = notConnectedText;
-        background.color = notConnectedColor;
     }
 }

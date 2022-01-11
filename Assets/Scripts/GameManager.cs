@@ -59,6 +59,12 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+
+    private void Start()
+    {
+        RunningProgram = new Program("example_program.json");
+    }
+
     private void Update()
     {
         RunningProgram?.UpdateRunning();

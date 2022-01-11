@@ -11,8 +11,6 @@ public class StageProgressBar : MonoBehaviour
     private Color runningColor;
     [SerializeField]
     private Color completeColor;
-    [SerializeField]
-    private float runningHeightMult;
 
     [SerializeField]
     private RawImage rawImage;
@@ -32,14 +30,6 @@ public class StageProgressBar : MonoBehaviour
     }
 
     private Stage associatedStage;
-    private float notRunningHeight;
-    private float runningHeight;
-
-    private void Awake()
-    {
-        notRunningHeight = layoutElement.preferredHeight;
-        runningHeight = notRunningHeight * runningHeightMult;
-    }
 
     private void OnDestroy()
     {
@@ -55,22 +45,18 @@ public class StageProgressBar : MonoBehaviour
     {
         if (associatedStage == null)
         {
-            layoutElement.preferredHeight = notRunningHeight;
             rawImage.color = incompleteColor;
         }
 
         switch (associatedStage.State)
         {
             case StageState.Incomplete:
-                layoutElement.preferredHeight = notRunningHeight;
                 rawImage.color = incompleteColor;
                 break;
             case StageState.Running:
-                layoutElement.preferredHeight = runningHeight;
                 rawImage.color = runningColor;
                 break;
             case StageState.Complete:
-                layoutElement.preferredHeight = notRunningHeight;
                 rawImage.color = completeColor;
                 break;
         }

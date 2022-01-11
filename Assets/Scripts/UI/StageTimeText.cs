@@ -11,6 +11,7 @@ public class StageTimeText : MonoBehaviour
 
     private float runningStageStartTime;
     private float runningStageDurationMinutes;
+    private bool isStageRunning = false;
 
     private void Awake()
     {
@@ -19,47 +20,49 @@ public class StageTimeText : MonoBehaviour
 
     private void OnRunningStageChanged(Stage runningStage)
     {        
-        bool isStageRunning = runningStage != null;
-        stageTimeText.gameObject.SetActive(isStageRunning);
+        isStageRunning = runningStage != null;
 
-        if (runningStage == null)
-        {
-            runningStageStartTime = 0f;
-            runningStageDurationMinutes = 0f;
-        }
-        else
+        if (isStageRunning)
         {
             runningStageStartTime = Time.time;
             runningStageDurationMinutes = runningStage.DurationMinutes;
+        }
+        else
+        {
+            runningStageStartTime = 0f;
+            runningStageDurationMinutes = 0f;
+            stageTimeText.text = "00:00";
         }        
     }
 
     private void Update()
     {
-        if (stageTimeText.isActiveAndEnabled)
+        if (!isStageRunning)
         {
-            float elapsedSeconds = Time.time - runningStageStartTime;
-            float displaySeconds;
+            return;
+        }
 
-            if (runningStageDurationMinutes > 0f)
-            {
-                displaySeconds = runningStageDurationMinutes * 60 - elapsedSeconds;
-            }
-            else
-            {
-                displaySeconds = elapsedSeconds;
-            }
+        float elapsedSeconds = Time.time - runningStageStartTime;
+        float displaySeconds;
 
-            TimeSpan timespan = TimeSpan.FromSeconds(displaySeconds);
+        if (runningStageDurationMinutes > 0f)
+        {
+            displaySeconds = runningStageDurationMinutes * 60 - elapsedSeconds;
+        }
+        else
+        {
+            displaySeconds = elapsedSeconds;
+        }
 
-            if (timespan.Hours > 0)
-            {
-                stageTimeText.text = timespan.ToString(@"hh\:mm\:ss");
-            }
-            else
-            {
-                stageTimeText.text = timespan.ToString(@"mm\:ss");
-            }
+        TimeSpan timespan = TimeSpan.FromSeconds(displaySeconds);
+
+        if (timespan.Hours > 0)
+        {
+            stageTimeText.text = timespan.ToString(@"hh\:mm\:ss");
+        }
+        else
+        {
+            stageTimeText.text = timespan.ToString(@"mm\:ss");
         }
     }
 }

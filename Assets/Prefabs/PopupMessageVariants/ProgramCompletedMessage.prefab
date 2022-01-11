@@ -36,6 +36,10 @@ PrefabInstance:
       propertyPath: m_PreferredHeight
       value: 75
       objectReference: {fileID: 0}
+    - target: {fileID: 8596825222390074832, guid: ebebe120739936244a67935d48df1fe9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f64513ba500c24645a84de0b402cdeb2, type: 3}
     - target: {fileID: 8596825222390074836, guid: ebebe120739936244a67935d48df1fe9, type: 3}
       propertyPath: m_Name
       value: RestartButton
@@ -232,6 +236,14 @@ PrefabInstance:
     - target: {fileID: 3770205337605748806, guid: 91d1d801948adf14fae9b562f109d482, type: 3}
       propertyPath: m_text
       value: You have completed the program!
+      objectReference: {fileID: 0}
+    - target: {fileID: 3770205337605748806, guid: 91d1d801948adf14fae9b562f109d482, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 6887491219885736010, guid: 91d1d801948adf14fae9b562f109d482, type: 3}
+      propertyPath: lifetime
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6887491219885736010, guid: 91d1d801948adf14fae9b562f109d482, type: 3}
       propertyPath: closeButtons.Array.size
