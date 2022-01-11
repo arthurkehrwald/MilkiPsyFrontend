@@ -62,7 +62,7 @@ public class Stage
         }
 
         DisplayName = parseResult.displayName;
-        DurationMinutes = parseResult.durationSeconds;
+        DurationMinutes = parseResult.durationMinutes;
 
         bool hasInstructions = !string.IsNullOrWhiteSpace(parseResult.instructionsFilename);
 
@@ -115,7 +115,7 @@ public class Stage
     {
         public string displayName;
         public string instructionsFilename;
-        public float durationSeconds;
+        public float durationMinutes;
 
         public bool IsValid()
         {
