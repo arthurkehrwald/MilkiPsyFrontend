@@ -79,7 +79,7 @@ public class Stage
     {
         if (runningStage == null)
         {
-            State = StageState.Incomplete;
+            State = StageState.Complete;
             return;
         }
 

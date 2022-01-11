@@ -1,20 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &2616274827240745597
+--- !u!114 &4132768536375414575
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7951913928271936602}
+  m_GameObject: {fileID: 5316780502113987523}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8e64fae0050593418a27e5bec6f742a, type: 3}
+  m_Script: {fileID: 11500000, guid: a51b8f5f8571e6a4fbf8e0c3090fff97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: {fileID: 7951913928271936601}
-  effect: 0
---- !u!1001 &1807299611657564558
+  button: {fileID: 5316780502113987520}
+--- !u!1001 &4505553801278121495
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -23,7 +22,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8596825222390074836, guid: ebebe120739936244a67935d48df1fe9, type: 3}
       propertyPath: m_Name
-      value: ChangeStageButton
+      value: QuitProgramButton
       objectReference: {fileID: 0}
     - target: {fileID: 8596825222390074837, guid: ebebe120739936244a67935d48df1fe9, type: 3}
       propertyPath: m_Pivot.x
@@ -111,17 +110,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ebebe120739936244a67935d48df1fe9, type: 3}
---- !u!1 &7951913928271936602 stripped
+--- !u!1 &5316780502113987523 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8596825222390074836, guid: ebebe120739936244a67935d48df1fe9, type: 3}
-  m_PrefabInstance: {fileID: 1807299611657564558}
+  m_PrefabInstance: {fileID: 4505553801278121495}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7951913928271936601 stripped
+--- !u!114 &5316780502113987520 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8596825222390074839, guid: ebebe120739936244a67935d48df1fe9, type: 3}
-  m_PrefabInstance: {fileID: 1807299611657564558}
+  m_PrefabInstance: {fileID: 4505553801278121495}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7951913928271936602}
+  m_GameObject: {fileID: 5316780502113987523}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}

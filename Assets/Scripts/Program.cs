@@ -126,7 +126,11 @@ public class Program
 
     public void GoToPrevStage()
     {
-        if (RunningStage != null)
+        if (RunningStage == null)
+        {
+            RunningStageIndex = stages.Count - 1;
+        }
+        else
         {
             RunningStageIndex--;
         }

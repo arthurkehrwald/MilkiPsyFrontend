@@ -19,17 +19,32 @@ public class PopupMessage : MonoBehaviour
     [SerializeField]
     private float lifetime;
     [SerializeField]
-    private Button closeButton;
+    private Button[] closeButtons;
     [SerializeField]
     private TextMeshProUGUI text;
     private DebugMessageType type;
 
     private void Awake()
     {
-        closeButton.onClick.AddListener(CloseButtonClickedHandler);
         if (lifetime > 0f)
         {
             Destroy(gameObject, lifetime);
+        }
+    }
+
+    private void OnEnable()
+    {
+        foreach (Button closeButton in closeButtons)
+        {
+            closeButton.onClick.AddListener(CloseButtonClickedHandler);
+        }
+    }
+
+    private void OnDisable()
+    {
+        foreach (Button closeButton in closeButtons)
+        {
+            closeButton.onClick.RemoveListener(CloseButtonClickedHandler);
         }
     }
 

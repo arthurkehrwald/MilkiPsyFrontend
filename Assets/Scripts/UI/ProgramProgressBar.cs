@@ -20,7 +20,15 @@ public class ProgramProgressBar : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameManager.Instance.runningProgramChanged.RemoveListener(OnRunningProgramChanged);
+        GameManager.Instance?.runningProgramChanged.RemoveListener(OnRunningProgramChanged);
+    }
+
+    private void OnEnable()
+    {
+        if (isRefreshScheduled)
+        {
+            Refresh();
+        }
     }
 
     private void OnRunningProgramChanged(Program runningProgram)
@@ -43,7 +51,10 @@ public class ProgramProgressBar : MonoBehaviour
         {
             foreach (StageProgressBar bar in stageProgressBars)
             {
-                Destroy(bar.gameObject);
+                if (bar != null)
+                {
+                    Destroy(bar.gameObject);
+                }
             }
         }
 

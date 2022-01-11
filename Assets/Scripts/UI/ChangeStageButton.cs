@@ -3,35 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChangeStageButton : MonoBehaviour
+public abstract class ChangeStageButton : MonoBehaviour
 {
-    public enum Effect { NextStage, PreviousStage };
-
     [SerializeField]
-    private Button button;
-    [SerializeField]
-    private Effect effect;
+    protected Button button;
 
-    private void Awake()
+    private void OnEnable()
     {
         button.onClick.AddListener(ButtonClickedHandler);
+        GameManager.Instance.runningProgramChanged.AddListener(RunningProgramChangedHandler);
+        GameManager.Instance.runningStageChanged.AddListener(RunningStageChangedHandler);
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         button.onClick.RemoveListener(ButtonClickedHandler);
+        GameManager.Instance?.runningProgramChanged.RemoveListener(RunningProgramChangedHandler);
+        GameManager.Instance?.runningStageChanged.RemoveListener(RunningStageChangedHandler);
     }
 
-    private void ButtonClickedHandler()
+    private void RunningProgramChangedHandler(Program runningProgram)
     {
-        switch (effect)
-        {
-            case Effect.NextStage:
-                GameManager.Instance.RunningProgram?.GoToNextStage();
-                break;
-            case Effect.PreviousStage:
-                GameManager.Instance.RunningProgram?.GoToPrevStage();
-                break;
-        }
+        bool isProgramRunning = runningProgram == null;
+        button.interactable = isProgramRunning;
     }
+
+    protected abstract void RunningStageChangedHandler(Stage runningStage);
+
+    protected abstract void ButtonClickedHandler();
 }

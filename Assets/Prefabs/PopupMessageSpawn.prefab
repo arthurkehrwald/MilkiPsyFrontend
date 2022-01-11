@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3472952288042073317}
   - component: {fileID: 1328583508522769084}
   - component: {fileID: 4165658926386051328}
+  - component: {fileID: 7842722751630239647}
   m_Layer: 5
   m_Name: PopupMessageSpawn
   m_TagString: Untagged
@@ -69,6 +70,20 @@ MonoBehaviour:
   goodPopupPrefab: {fileID: 6887491219885736010, guid: 91d1d801948adf14fae9b562f109d482, type: 3}
   badPopupPrefab: {fileID: 6887491219885736010, guid: 97bde0eb3a6c71045ad58a452d5b5f14, type: 3}
   neutralPopupPrefab: {fileID: 6887491219885736010, guid: 331079d3bd968e1419c54704bb1c83dd, type: 3}
+--- !u!114 &7842722751630239647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6163457448688310548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c1973330d184f24a81dac73a08b752d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnParent: {fileID: 1099763986062380208}
+  popupPrefab: {fileID: 1104725259561075093, guid: 2afcac1d022854247ba007a7ba69f703, type: 3}
 --- !u!1 &9062997673430063682
 GameObject:
   m_ObjectHideFlags: 0

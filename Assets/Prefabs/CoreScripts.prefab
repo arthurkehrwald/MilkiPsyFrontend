@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 6079667928829707127}
   - component: {fileID: 6079667928829707126}
   m_Layer: 0
-  m_Name: StatusSender
+  m_Name: StateSender
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -142,7 +142,7 @@ GameObject:
   - component: {fileID: 6079667929326049382}
   - component: {fileID: 6079667929326049383}
   m_Layer: 0
-  m_Name: StatusTracker
+  m_Name: StateTracker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

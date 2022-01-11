@@ -66,7 +66,7 @@ public class Client : Singleton<Client>
     { 
         if (!IsConnected)
         {
-            Debug.LogError("[Client] Cannot send message to server because there is no connection");
+            Debug.LogWarning("[Client] Cannot send message to server because there is no connection");
             return;
         }
 
@@ -186,7 +186,7 @@ public class Client : Singleton<Client>
             {
                 if (e is SocketException || e is ObjectDisposedException)
                 {
-                    Debug.LogError($"[Client] Error while connecting to server: {e.Message.Split('\r')[0]}" +
+                    Debug.LogWarning($"[Client] Error while connecting to server: {e.Message.Split('\r')[0]}" +
                         $" Will try again in {retryConnectDelayMs}ms");
                     await Task.Delay(retryConnectDelayMs);
                 }
