@@ -27,10 +27,10 @@ public class ChangeStageButton : MonoBehaviour
         switch (effect)
         {
             case Effect.NextStage:
-                GameManager.Instance.GoToNextStage();
+                GameManager.Instance.RunningProgram?.GoToNextStage();
                 break;
             case Effect.PreviousStage:
-                GameManager.Instance.GoToPrevStage();
+                GameManager.Instance.RunningProgram?.GoToPrevStage();
                 break;
         }
     }

@@ -16,7 +16,7 @@ public class Stage
     public InstructionsOrFeedback Instructions { get; private set; }
     public readonly Program parentProgram;
     public readonly int indexInParentProgram;
-    public float Duration { get; private set; }
+    public float DurationMinutes { get; private set; }
     private float startRunningTime;
     private StageState state;
     public StageState State
@@ -62,7 +62,7 @@ public class Stage
         }
 
         DisplayName = parseResult.displayName;
-        Duration = parseResult.durationSeconds;
+        DurationMinutes = parseResult.durationSeconds;
 
         bool hasInstructions = !string.IsNullOrWhiteSpace(parseResult.instructionsFilename);
 
@@ -100,10 +100,10 @@ public class Stage
 
     public void UpdateRunning()
     {
-        if (State == StageState.Running && Duration > 0f)
+        if (State == StageState.Running && DurationMinutes > 0f)
         {
-            float elapsedTime = Time.time - startRunningTime;
-            if (elapsedTime >= Duration)
+            float elapsedSeconds = Time.time - startRunningTime;
+            if (elapsedSeconds >= DurationMinutes * 60f)
             {
                 State = StageState.Complete;
             }

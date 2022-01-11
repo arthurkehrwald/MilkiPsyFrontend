@@ -27,6 +27,7 @@ public class StageProgressBar : MonoBehaviour
             associatedStage?.stateChanged.RemoveListener(OnAssociatedStageStateChanged);
             associatedStage = value;
             associatedStage.stateChanged.AddListener(OnAssociatedStageStateChanged);
+            Refresh();
         }        
     }
 
@@ -47,10 +48,21 @@ public class StageProgressBar : MonoBehaviour
 
     private void OnAssociatedStageStateChanged(StageState state)
     {
-        switch (state)
+        Refresh();
+    }
+
+    private void Refresh()
+    {
+        if (associatedStage == null)
+        {
+            layoutElement.preferredHeight = notRunningHeight;
+            rawImage.color = incompleteColor;
+        }
+
+        switch (associatedStage.State)
         {
             case StageState.Incomplete:
-                layoutElement.preferredHeight = runningHeight;
+                layoutElement.preferredHeight = notRunningHeight;
                 rawImage.color = incompleteColor;
                 break;
             case StageState.Running:
@@ -58,7 +70,7 @@ public class StageProgressBar : MonoBehaviour
                 rawImage.color = runningColor;
                 break;
             case StageState.Complete:
-                layoutElement.preferredHeight = runningHeight;
+                layoutElement.preferredHeight = notRunningHeight;
                 rawImage.color = completeColor;
                 break;
         }

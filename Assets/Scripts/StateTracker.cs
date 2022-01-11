@@ -39,7 +39,7 @@ public class StateTracker : Singleton<StateTracker>
 
     private void RunningProgramChangedHandler(Program runningProgram)
     {
-        UpdateState(runningProgram, runningProgram.RunningStage);
+        UpdateState(runningProgram, runningProgram?.RunningStage);
     }
 
     private void RunningStageChangedHandler(Stage runningStage)

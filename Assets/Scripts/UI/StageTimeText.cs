@@ -10,7 +10,7 @@ public class StageTimeText : MonoBehaviour
     private TextMeshProUGUI stageTimeText;
 
     private float runningStageStartTime;
-    private float runningStageDuration;
+    private float runningStageDurationMinutes;
 
     private void Awake()
     {
@@ -25,12 +25,12 @@ public class StageTimeText : MonoBehaviour
         if (runningStage == null)
         {
             runningStageStartTime = 0f;
-            runningStageDuration = 0f;
+            runningStageDurationMinutes = 0f;
         }
         else
         {
             runningStageStartTime = Time.time;
-            runningStageDuration = runningStage.Duration;
+            runningStageDurationMinutes = runningStage.DurationMinutes;
         }        
     }
 
@@ -41,9 +41,9 @@ public class StageTimeText : MonoBehaviour
             float elapsedSeconds = Time.time - runningStageStartTime;
             float displaySeconds;
 
-            if (runningStageDuration > 0f)
+            if (runningStageDurationMinutes > 0f)
             {
-                displaySeconds = runningStageDuration - elapsedSeconds;
+                displaySeconds = runningStageDurationMinutes * 60 - elapsedSeconds;
             }
             else
             {
@@ -51,10 +51,7 @@ public class StageTimeText : MonoBehaviour
             }
 
             TimeSpan timespan = TimeSpan.FromSeconds(displaySeconds);
-            if (displaySeconds > 600)   
-                stageTimeText.text = timespan.ToString(@"m\:ss");
-            else
-                stageTimeText.text = "0" + timespan.ToString(@"m\:ss");
+            stageTimeText.text = timespan.ToString(@"mm\:ss");
         }
     }
 }

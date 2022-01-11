@@ -1,13 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.Events;
 
 public class RunningProgramChanged : UnityEvent<Program> { }
+public class ProgramsParsed : UnityEvent<IReadOnlyCollection<Program>> { }
 public class GameManager : Singleton<GameManager>
 {
+    public ProgramsParsed programsParsed = new ProgramsParsed();
     public RunningProgramChanged runningProgramChanged = new RunningProgramChanged();
     // Pass-through event that is always invoked along with the corresponding
     // event of the running program. Users don't need to worry about
@@ -15,14 +16,26 @@ public class GameManager : Singleton<GameManager>
     public RunningStageChanged runningStageChanged = new RunningStageChanged();
 
     private List<Program> programs = new List<Program>();
+    public IReadOnlyCollection<Program> Programs
+    {
+        get => programs.AsReadOnly();
+    }
     private Program runningProgram;
     public Program RunningProgram
     {
         get => runningProgram;
-        private set
+        set
         {
             if (value == runningProgram)
             {
+                return;
+            }
+
+            if (value != null && !programs.Contains(value))
+            {
+                Debug.LogError("[GameManager] Something attempted to" +
+                    "start a program that was not on the list of parsed" +
+                    "programs");
                 return;
             }
          
@@ -34,12 +47,11 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private async void Start()
+    private void Awake()
     {
-        //ParseAllPrograms();
         try
         {
-            RunningProgram = new Program("example_program.json");
+            ParseAllPrograms();
         }
         catch (Exception e)
         {
@@ -57,49 +69,27 @@ public class GameManager : Singleton<GameManager>
         runningStageChanged?.Invoke(runningStage);
     }
 
-    public void GoToPrevStage()
-    {
-        RunningProgram?.GoToPrevStage();
-    }
-
-    public void GoToNextStage()
-    {
-        RunningProgram?.GoToNextStage();
-    }
-
     private void ParseAllPrograms()
     {
         string path = ConfigPaths.programFolderPath;
         DirectoryInfo dataDir = new DirectoryInfo(path);
 
-        try
-        {
-            FileInfo[] fileinfo = dataDir.GetFiles();
+        FileInfo[] directory = dataDir.GetFiles();
+        List<Program> tempList = new List<Program>();
 
-            for (int i = 0; i < fileinfo.Length; i++)
+        foreach (FileInfo file in directory)
+        {
+            string name = file.Name;
+            bool isJson = Path.GetExtension(name) == ".json";
+
+            if (!isJson)
             {
-                string name = fileinfo[i].Name;
-                bool isJson = Path.GetExtension(name) == ".json";
-
-                if (!isJson)
-                {
-                    continue;
-                }
-
-                string text = "";
-
-                using (StreamReader sr = fileinfo[i].OpenText())
-                {
-                    text = sr.ReadToEnd();
-                }
-
-                Debug.Log("name: " + name);
-                Debug.Log("text: " + text);
+                continue;
             }
+
+            programs.Add(new Program(name));
         }
-        catch (System.Exception e)
-        {
-            Debug.Log(e);
-        }
+
+        programsParsed?.Invoke(programs.AsReadOnly());
     }
 }

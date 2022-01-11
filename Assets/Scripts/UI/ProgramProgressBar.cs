@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ProgramProgressBar : MonoBehaviour
@@ -11,13 +10,35 @@ public class ProgramProgressBar : MonoBehaviour
 
     private StageProgressBar[] stageProgressBars;
 
+    bool isRefreshScheduled = false;    
+
     private void Awake()
     {
         GameManager.Instance.runningProgramChanged.AddListener(OnRunningProgramChanged);
+        Refresh();
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.runningProgramChanged.RemoveListener(OnRunningProgramChanged);
     }
 
     private void OnRunningProgramChanged(Program runningProgram)
     {
+        if (isActiveAndEnabled)
+        {
+            Refresh();
+        }
+        else
+        {
+            isRefreshScheduled = true;
+        }
+    }
+
+    private void Refresh()
+    {
+        isRefreshScheduled = false;
+
         if (stageProgressBars != null)
         {
             foreach (StageProgressBar bar in stageProgressBars)
@@ -26,11 +47,18 @@ public class ProgramProgressBar : MonoBehaviour
             }
         }
 
+        Program runningProgram = GameManager.Instance.RunningProgram;
+
+        if (runningProgram == null)
+        {
+            return;
+        }
+
         stageProgressBars = new StageProgressBar[runningProgram.Stages.Count];
         for (int i = 0; i < stageProgressBars.Length; i++)
         {
             stageProgressBars[i] = Instantiate(stageProgressBarPrefab, stageProgressBarParent);
-            stageProgressBars[i].AssociatedStage = runningProgram.Stages[i];
+            stageProgressBars[i].AssociatedStage = runningProgram.Stages.ElementAt(i);
         }
     }
 }

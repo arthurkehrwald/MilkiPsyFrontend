@@ -15,6 +15,6 @@ public class ProgramNameDisplay : MonoBehaviour
 
     private void OnRunningProgramChanged(Program runningProgram)
     {
-        nameText.text = runningProgram.DisplayName;
+        nameText.text = runningProgram?.DisplayName;
     }
 }

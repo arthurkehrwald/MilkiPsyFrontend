@@ -13,8 +13,7 @@ public class Program
     public readonly string fileName;
     public string DisplayName { get; private set; }
     public readonly string uniqueName;
-    public List<Stage> Stages { get; private set; }
-    private Stage runningStage = null;
+    public readonly float estimatedDurationMinutes;
     public Stage RunningStage
     {
         get => runningStage;
@@ -25,28 +24,30 @@ public class Program
                 return;
             }
 
-            if (Stages.Contains(value))
+            if (value != null && !stages.Contains(value))
             {
-                runningStage?.stateChanged.RemoveListener(OnRunningStageStateChanged);
-                runningStage = value;
-                RunningStageIndex = Stages.IndexOf(RunningStage);
-            }
-            else if (runningStage == null)
-            {
+                Debug.LogError("[Program] Something attempted to" +
+                    "start a stage that was not on the list of parsed" +
+                    "stages");
                 return;
+            }
+
+            runningStage?.stateChanged.RemoveListener(OnRunningStageStateChanged);
+            runningStage = value;
+
+            if (runningStage == null)
+            {
+                RunningStageIndex = -1;
             }
             else
             {
-                runningStage.stateChanged.RemoveListener(OnRunningStageStateChanged);
-                runningStage = null;
-                RunningStageIndex = -1;
+                RunningStageIndex = stages.IndexOf(RunningStage);
             }
 
             runningStageChanged?.Invoke(runningStage);
             runningStage?.stateChanged.AddListener(OnRunningStageStateChanged);
         }
     }
-    private int runningStageIndex = -1;
     public int RunningStageIndex
     {
         get => runningStageIndex;
@@ -57,22 +58,27 @@ public class Program
                 return;
             }
 
-            if (value >= 0 && value < Stages.Count)
+            if (value >= 0 && value < stages.Count)
             {
                 runningStageIndex = value;
-                RunningStage = Stages[runningStageIndex];
-            }
-            else if (runningStageIndex == -1)
-            {
-                return;
+                RunningStage = stages[runningStageIndex];
             }
             else
-            { 
+            {
                 runningStageIndex = -1;
                 RunningStage = null;
             }
         }
     }
+    public IReadOnlyCollection<Stage> Stages
+    {
+        get => stages.AsReadOnly();
+    }
+
+
+    private Stage runningStage = null;
+    private int runningStageIndex = -1;
+    private readonly List<Stage> stages;
 
     public Program(string fileName)
     {
@@ -98,12 +104,13 @@ public class Program
         }
 
         DisplayName = parseResult.displayName;
-        Stages = new List<Stage>(parseResult.stageFilenames.Length);
+        estimatedDurationMinutes = parseResult.estimatedDurationMinutes;
+        stages = new List<Stage>(parseResult.stageFilenames.Length);
 
         for (int i = 0; i < parseResult.stageFilenames.Length; i++)
         {
             Stage stage = new Stage(parseResult.stageFilenames[i], this, i);
-            Stages.Add(stage);
+            stages.Add(stage);
         }
     }
 
@@ -160,6 +167,7 @@ public class Program
     private struct ProgramParseResult : IParseResult
     {
         public string displayName;
+        public float estimatedDurationMinutes;
         public string[] stageFilenames;
 
         public bool IsValid()
