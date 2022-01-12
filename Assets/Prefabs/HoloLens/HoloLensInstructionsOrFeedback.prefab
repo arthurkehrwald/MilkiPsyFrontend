@@ -249,7 +249,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1224646697240131001, guid: 44127dc4596fe4340831256fbfd4e67a, type: 3}
       propertyPath: m_Name
-      value: InstructionsOrFeedback
+      value: HoloLensInstructionsOrFeedback
       objectReference: {fileID: 0}
     - target: {fileID: 1224646697240131013, guid: 44127dc4596fe4340831256fbfd4e67a, type: 3}
       propertyPath: hideByDefault
@@ -274,6 +274,14 @@ PrefabInstance:
     - target: {fileID: 2935019510392647624, guid: 44127dc4596fe4340831256fbfd4e67a, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -700
+      objectReference: {fileID: 0}
+    - target: {fileID: 6274741019532978722, guid: 44127dc4596fe4340831256fbfd4e67a, type: 3}
+      propertyPath: useAcceptFeedbackButton
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6274741019532978722, guid: 44127dc4596fe4340831256fbfd4e67a, type: 3}
+      propertyPath: displayCurrentInstructionsAfterFeedback
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6390000093739865663, guid: 44127dc4596fe4340831256fbfd4e67a, type: 3}
       propertyPath: m_AnchorMax.x

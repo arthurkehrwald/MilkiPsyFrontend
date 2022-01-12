@@ -7,24 +7,32 @@ public class FeedbackHandler : MonoBehaviour, IReceivedMessageHandler
     private const ReceivedMessageType HandledMessageType = ReceivedMessageType.Feedback;
 
     [SerializeField]
+    private bool useAcceptFeedbackButton;
+    [SerializeField]
     private InstructionsOrFeedbackDisplay feedbackDisplay;
     [SerializeField]
     private Button acceptFeedbackButton;
 
     private bool hasUserAcceptedFeedback = false;
 
-    private void OnEnable()
+    private void Awake()
     {
         Client.Instance.TryRegisterReceivedMessageHandler(this, HandledMessageType);
         GameManager.Instance.runningStageChanged.AddListener(RunningStageChangedHandler);
-        acceptFeedbackButton.onClick.AddListener(UiAcceptedFeedbackHandler);
+        if (useAcceptFeedbackButton)
+        {
+            acceptFeedbackButton.onClick.AddListener(UiAcceptedFeedbackHandler);
+        }
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         Client.Instance?.TryUnregisterReceivedMessageHandler(this, HandledMessageType);
         GameManager.Instance?.runningStageChanged.RemoveListener(RunningStageChangedHandler);
-        acceptFeedbackButton?.onClick.AddListener(UiAcceptedFeedbackHandler);
+        if (useAcceptFeedbackButton)
+        {
+            acceptFeedbackButton?.onClick.AddListener(UiAcceptedFeedbackHandler);
+        }
     }
 
     public async void Handle(string messageJson)
@@ -60,9 +68,13 @@ public class FeedbackHandler : MonoBehaviour, IReceivedMessageHandler
             return;
         }
 
-        await feedbackDisplay.Display(feedback);
+        await feedbackDisplay.Display(feedback, true);
         hasUserAcceptedFeedback = false;
-        acceptFeedbackButton.gameObject.SetActive(true);
+
+        if (useAcceptFeedbackButton)
+        {
+            acceptFeedbackButton.gameObject.SetActive(true);
+        }
     }
 
     private async void UiAcceptedFeedbackHandler()
@@ -84,7 +96,11 @@ public class FeedbackHandler : MonoBehaviour, IReceivedMessageHandler
         if (!hasUserAcceptedFeedback)
         {
             hasUserAcceptedFeedback = true;
-            acceptFeedbackButton.gameObject.SetActive(false);
+
+            if (useAcceptFeedbackButton)
+            {
+                acceptFeedbackButton.gameObject.SetActive(false);
+            }
         }
     }
 

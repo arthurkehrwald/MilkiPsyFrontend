@@ -169,6 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af289ca03803e5d4c92e8b4bc8280cc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hideByDefault: 0
   visuals: {fileID: 1552490719954000355}
   textArea: {fileID: 11340121453170605}
   mediaArea: {fileID: 5956783205391620117}
@@ -190,6 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 548e1ac80ae01084d9c8c9472afa327a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useAcceptFeedbackButton: 1
   feedbackDisplay: {fileID: 1224646697240131013}
   acceptFeedbackButton: {fileID: 4950625941969390667}
 --- !u!114 &1151221495573024081
@@ -990,7 +992,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8596825222390074837, guid: ebebe120739936244a67935d48df1fe9, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 895
+      value: 890
       objectReference: {fileID: 0}
     - target: {fileID: 8596825222390074837, guid: ebebe120739936244a67935d48df1fe9, type: 3}
       propertyPath: m_AnchoredPosition.y

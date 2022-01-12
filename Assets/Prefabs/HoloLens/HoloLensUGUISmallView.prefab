@@ -693,7 +693,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9018390857345104158, guid: 004ffcb01b9861c41b2994cbc52d2557, type: 3}
       propertyPath: fixedVerticalPosition
-      value: 0.2
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 9018390858610239932, guid: 004ffcb01b9861c41b2994cbc52d2557, type: 3}
       propertyPath: m_SizeDelta.y

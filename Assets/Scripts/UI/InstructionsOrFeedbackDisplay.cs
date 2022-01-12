@@ -30,6 +30,8 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
     [SerializeField]
     private AudioSource audioSource;
 
+    private InstructionsOrFeedback scheduledInstructionsOrFeedback;
+
     private void Awake()
     {
         GameManager.Instance.runningStageChanged.AddListener(RunningStageChangedHandler);
@@ -40,7 +42,15 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
     {
         if (visualsActive)
         {
-            await Display(GameManager.Instance.RunningProgram?.RunningStage?.Instructions);
+            if (scheduledInstructionsOrFeedback == null)
+            {
+                await Display(GameManager.Instance.RunningProgram?.RunningStage?.Instructions);
+            }
+            else
+            {
+                await Display(scheduledInstructionsOrFeedback);
+                scheduledInstructionsOrFeedback = null;
+            }
         }
     }
 
@@ -49,8 +59,21 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
         await Display(runningStage?.Instructions);
     }
 
-    public async Task Display(InstructionsOrFeedback instructionsOrFeedback)
+    public async Task Display(InstructionsOrFeedback instructionsOrFeedback, bool forceEnable = false)
     {
+        if (!visuals.gameObject.activeInHierarchy)
+        {
+            if (forceEnable)
+            {
+                scheduledInstructionsOrFeedback = instructionsOrFeedback;
+                visuals.gameObject.SetActive(true);
+            }
+            else
+            {
+                return;
+            }
+        }
+
         if (instructionsOrFeedback == null)
         {
             DisplayText(null);

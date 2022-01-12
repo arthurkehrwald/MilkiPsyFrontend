@@ -7,6 +7,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 756748052063337172, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 756748052063337172, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 756748052063337172, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 756748052063337172, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 756748052063337172, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1715951521324273725, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
       propertyPath: m_Name
       value: DebugErrorPopupMessage
@@ -176,6 +196,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8417574244240422823, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8528394672166908401, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8528394672166908401, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8528394672166908401, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8528394672166908401, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8528394672166908401, guid: ff2e104ec6941414d85eaa17146f2ffd, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
