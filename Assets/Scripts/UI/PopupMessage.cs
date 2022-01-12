@@ -22,7 +22,6 @@ public class PopupMessage : MonoBehaviour
     private Button[] closeButtons;
     [SerializeField]
     private TextMeshProUGUI text;
-    private DebugMessageType type;
 
     private void Awake()
     {

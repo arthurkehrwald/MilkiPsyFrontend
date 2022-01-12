@@ -15,7 +15,7 @@ public class ConnectionStatusDisplay : MonoBehaviour
 
     private void Awake()
     {
-        text.text = notConnectedText;
+        text.text = Client.Instance.IsConnected ? connectedText : notConnectedText;
         Client.Instance.connected.AddListener(ConnectedToServerHandler);
         Client.Instance.disconnected.AddListener(DisconnectedFromServerHandler);
     }

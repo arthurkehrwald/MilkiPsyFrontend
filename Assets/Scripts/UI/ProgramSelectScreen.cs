@@ -8,7 +8,7 @@ public class ProgramSelectScreen : MonoBehaviour
     [SerializeField]
     private RectTransform spawnParent;
     [SerializeField]
-    private RectTransform screenRoot;
+    private RectTransform visuals;
 
     private List<ProgramSelectEntry> spawnedPrefabs = new List<ProgramSelectEntry>();
     private bool isRefreshScheduled = false;
@@ -19,7 +19,7 @@ public class ProgramSelectScreen : MonoBehaviour
         GameManager.Instance.programsParsed.AddListener(ProgramsParsedHandler);
 
         bool isProgramRunning = GameManager.Instance.RunningProgram != null;
-        screenRoot.gameObject.SetActive(!isProgramRunning);
+        visuals.gameObject.SetActive(!isProgramRunning);
 
         if (!isProgramRunning)
         {
@@ -44,7 +44,7 @@ public class ProgramSelectScreen : MonoBehaviour
 
     private void ProgramsParsedHandler(IReadOnlyCollection<Program> programs)
     {
-        if (screenRoot.gameObject.activeInHierarchy)
+        if (visuals.gameObject.activeInHierarchy)
         {
             Refresh();
         }
@@ -57,7 +57,7 @@ public class ProgramSelectScreen : MonoBehaviour
     private void RunningProgramChangedHandler(Program runningProgram)
     {
         bool isProgramRunning = runningProgram != null;
-        screenRoot.gameObject.SetActive(!isProgramRunning);
+        visuals.gameObject.SetActive(!isProgramRunning);
     }
 
     private void Refresh()

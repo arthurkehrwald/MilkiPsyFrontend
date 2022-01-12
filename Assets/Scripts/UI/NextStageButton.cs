@@ -12,6 +12,6 @@ public class NextStageButton : ChangeStageButton
 
     protected override void ButtonClickedHandler()
     {
-        GameManager.Instance.RunningProgram.GoToNextStage();
+        GameManager.Instance.RunningProgram?.GoToNextStage();
     }
 }

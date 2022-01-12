@@ -9,6 +9,11 @@ using TMPro;
 public class InstructionsOrFeedbackDisplay : MonoBehaviour
 {
     [SerializeField]
+    private bool hideByDefault = false;
+
+    [SerializeField]
+    private ActiveNotifier visuals;
+    [SerializeField]
     private GameObject textArea;
     [SerializeField]
     private GameObject mediaArea;
@@ -28,11 +33,15 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
     private void Awake()
     {
         GameManager.Instance.runningStageChanged.AddListener(RunningStageChangedHandler);
+        visuals.isActiveChanged.AddListener(VisualsActiveChangedHandler);
     }
 
-    private void OnDestroy()
+    private async void VisualsActiveChangedHandler(bool visualsActive)
     {
-        GameManager.Instance?.runningStageChanged.RemoveListener(RunningStageChangedHandler);
+        if (visualsActive)
+        {
+            await Display(GameManager.Instance.RunningProgram?.RunningStage?.Instructions);
+        }
     }
 
     private async void RunningStageChangedHandler(Stage runningStage)
@@ -52,6 +61,11 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
             DisplayText(instructionsOrFeedback.text);
             await DisplayMediaAsync(instructionsOrFeedback.MediaFilePath, instructionsOrFeedback.MediaType);
         }
+
+        if (hideByDefault && !textArea.activeSelf && !mediaArea.activeSelf)
+        {
+            visuals.gameObject.SetActive(false);
+        }        
     }
 
     private void DisplayText(string text)

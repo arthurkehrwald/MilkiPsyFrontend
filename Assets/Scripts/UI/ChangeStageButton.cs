@@ -8,18 +8,24 @@ public abstract class ChangeStageButton : MonoBehaviour
     [SerializeField]
     protected Button button;
 
-    private void OnEnable()
+    private void Awake()
     {
         button.onClick.AddListener(ButtonClickedHandler);
         GameManager.Instance.runningProgramChanged.AddListener(RunningProgramChangedHandler);
         GameManager.Instance.runningStageChanged.AddListener(RunningStageChangedHandler);
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         button.onClick.RemoveListener(ButtonClickedHandler);
         GameManager.Instance?.runningProgramChanged.RemoveListener(RunningProgramChangedHandler);
         GameManager.Instance?.runningStageChanged.RemoveListener(RunningStageChangedHandler);
+    }
+
+    private void OnEnable()
+    {
+        bool isProgramRunning = GameManager.Instance.RunningProgram == null;
+        button.interactable = isProgramRunning;
     }
 
     private void RunningProgramChangedHandler(Program runningProgram)

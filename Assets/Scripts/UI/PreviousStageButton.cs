@@ -18,6 +18,6 @@ public class PreviousStageButton : ChangeStageButton
 
     protected override void ButtonClickedHandler()
     {
-        GameManager.Instance.RunningProgram.GoToPrevStage();
+        GameManager.Instance.RunningProgram?.GoToPrevStage();
     }
 }

@@ -6,10 +6,11 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class RunningStageChanged : UnityEvent<Stage> { }
-
 public class Program
 {
     public RunningStageChanged runningStageChanged = new RunningStageChanged();
+    public UnityEvent completed = new UnityEvent();
+
     public readonly string fileName;
     public string DisplayName { get; private set; }
     public readonly string uniqueName;
@@ -65,6 +66,11 @@ public class Program
             }
             else
             {
+                if (value >= stages.Count)
+                {
+                    completed?.Invoke();
+                }
+
                 runningStageIndex = -1;
                 RunningStage = null;
             }
@@ -122,6 +128,11 @@ public class Program
     public void UpdateRunning()
     {
         RunningStage?.UpdateRunning();
+    }
+
+    public void StopRunning()
+    {
+        RunningStage = null;
     }
 
     public void GoToPrevStage()

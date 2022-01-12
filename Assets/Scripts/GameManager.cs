@@ -10,10 +10,11 @@ public class GameManager : Singleton<GameManager>
 {
     public ProgramsParsed programsParsed = new ProgramsParsed();
     public RunningProgramChanged runningProgramChanged = new RunningProgramChanged();
-    // Pass-through event that is always invoked along with the corresponding
+    // Pass-through events that are always invoked along with the corresponding
     // event of the running program. Users don't need to worry about
     // changing their subscription when the running program changes
     public RunningStageChanged runningStageChanged = new RunningStageChanged();
+    public UnityEvent runningProgramCompleted = new UnityEvent();
 
     private List<Program> programs = new List<Program>();
     public IReadOnlyCollection<Program> Programs
@@ -39,10 +40,13 @@ public class GameManager : Singleton<GameManager>
                 return;
             }
          
+            runningProgram?.StopRunning();
             runningProgram?.runningStageChanged.RemoveListener(RunningProgramStageChangedHandler);
+            runningProgram?.completed.RemoveListener(RunningProgramCompletedHandler);
             runningProgram = value;
             runningProgramChanged?.Invoke(runningProgram);
             runningProgram?.runningStageChanged.AddListener(RunningProgramStageChangedHandler);
+            runningProgram?.completed.AddListener(RunningProgramCompletedHandler);
             runningProgram?.StartRunning();
         }
     }
@@ -59,12 +63,6 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-
-    private void Start()
-    {
-        RunningProgram = new Program("example_program.json");
-    }
-
     private void Update()
     {
         RunningProgram?.UpdateRunning();
@@ -73,6 +71,11 @@ public class GameManager : Singleton<GameManager>
     private void RunningProgramStageChangedHandler(Stage runningStage)
     {
         runningStageChanged?.Invoke(runningStage);
+    }
+
+    private void RunningProgramCompletedHandler()
+    {
+        runningProgramCompleted?.Invoke();
     }
 
     private void ParseAllPrograms()

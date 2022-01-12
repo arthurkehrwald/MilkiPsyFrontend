@@ -9,20 +9,17 @@ public class ProgramCompletedPopupSpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.Instance.runningStageChanged.AddListener(RunningStageChangedHandler);
+        GameManager.Instance.runningProgramCompleted.AddListener(RunningProgramCompletedHandler);
     }
 
     private void OnDisable()
     {
-        GameManager.Instance?.runningStageChanged.RemoveListener(RunningStageChangedHandler);
+        GameManager.Instance?.runningProgramCompleted.RemoveListener(RunningProgramCompletedHandler);
     }
 
-    private void RunningStageChangedHandler(Stage runningStage)
+    private void RunningProgramCompletedHandler()
     {
-        if (runningStage == null)
-        {
-            SpawnPopup();
-        }
+        SpawnPopup();
     }
 
     private void SpawnPopup()

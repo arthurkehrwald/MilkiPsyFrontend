@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: 6213908040401233516}
   - component: {fileID: 6213908040401233517}
   m_Layer: 5
-  m_Name: VerticalGroup
+  m_Name: ProgramSelectScreenVisuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -317,8 +317,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Select Program
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d7354c686f924b649a87f0aaa6ce7506, type: 2}
+  m_sharedMaterial: {fileID: -6285616837841983737, guid: d7354c686f924b649a87f0aaa6ce7506, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -349,7 +349,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -435,7 +435,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectEntryPrefab: {fileID: 5084537697727906063, guid: e3505ba52412bf54a87325c0d6963e5b, type: 3}
   spawnParent: {fileID: 6213908040120346999}
-  screenRoot: {fileID: 6213908041158836594}
+  visuals: {fileID: 6213908040401233518}
 --- !u!1 &6213908041404093454
 GameObject:
   m_ObjectHideFlags: 0
