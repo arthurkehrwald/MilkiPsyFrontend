@@ -7,15 +7,16 @@ using UnityEngine.UI;
 public class ConnectionStatusDisplay : MonoBehaviour
 {
     [SerializeField]
-    private string notConnectedText = "Establishing Connection...";
+    private RectTransform notConnectedObject;
     [SerializeField]
-    private string connectedText = "Connected to Server";
-    [SerializeField]
-    private TextMeshProUGUI text;
+    private RectTransform connectedObject;
 
     private void Awake()
     {
-        text.text = Client.Instance.IsConnected ? connectedText : notConnectedText;
+        bool isConnected = Client.Instance.IsConnected;
+        notConnectedObject.gameObject.SetActive(!isConnected);
+        connectedObject.gameObject.SetActive(isConnected);
+
         Client.Instance.connected.AddListener(ConnectedToServerHandler);
         Client.Instance.disconnected.AddListener(DisconnectedFromServerHandler);
     }
@@ -28,11 +29,13 @@ public class ConnectionStatusDisplay : MonoBehaviour
 
     private void ConnectedToServerHandler()
     {
-        text.text = connectedText;
+        notConnectedObject.gameObject.SetActive(false);
+        connectedObject.gameObject.SetActive(true);
     }
 
     private void DisconnectedFromServerHandler()
     {
-        text.text = notConnectedText;
+        notConnectedObject.gameObject.SetActive(true);
+        connectedObject.gameObject.SetActive(false);
     }
 }
