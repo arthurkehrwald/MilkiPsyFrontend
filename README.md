@@ -44,8 +44,8 @@ Each instruction is defined in its own .json file in 'MilkiPsyConfiguration/Inst
 
 | Key | Type | Meaning | Required |
 | - | - |- | - |
-| text | string | The text to display to the user. Can use [markup syntax](http://digitalnativestudios.com/textmeshpro/docs/rich-text/). | Yes, unless 'media' is defined
-| mediaFilename | string | The name of the media file to display, including the file ending. | Yes, unless 'text' is defined |
+| text | String | The text to display to the user. Can use [markup syntax](http://digitalnativestudios.com/textmeshpro/docs/rich-text/). | Yes, unless 'media' is defined
+| mediaFilename | String | The name of the media file to display, including the file ending. | Yes, unless 'text' is defined |
 
 ### Media
 
