@@ -5,6 +5,8 @@ using UnityEngine.Video;
 using UnityEngine.UI;
 using System.IO;
 using TMPro;
+using System;
+using System.Windows;
 
 public class InstructionsOrFeedbackDisplay : MonoBehaviour
 {
@@ -137,20 +139,34 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
 
     private async Task DisplayVideoAsync(string videoFilePath)
     {
-#if UNITY_WSA && !UNITY_EDITOR
+#if ENABLE_WINMD_SUPPORT
         // On HoloLens, VideoPlayer can't read from user storage (e.g. Documents),
         // even if the appropriate capability is declared in the manifest.
-        // As a workaround, copy videos to streaming assets folder first.
+        // As a workaround, copy videos to app data folder first.
         string videoFileName = Path.GetFileName(videoFilePath);
-        string copyDest = Path.Combine(Application.streamingAssetsPath, videoFileName);
-        await FileAccessHelper.CopyAsync(videoFilePath, copyDest);
-        videoFilePath = copyDest;
+        string copyDest = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, videoFileName);
+        try
+        {
+            await FileAccessHelper.CopyAsync(videoFilePath, copyDest);
+            videoFilePath = copyDest;
+        }
+        catch (Exception e)
+        {
+            DebugMessageRelay.Instance.RelayMessage(e.Message, DebugMessageType.Error);
+            DebugMessageRelay.Instance.RelayMessage(copyDest, DebugMessageType.Error);
+        }
 #endif
 
         image.gameObject.SetActive(false);
         audioSource.gameObject.SetActive(false);
         videoPlayer.gameObject.SetActive(true);
         videoPlayer.renderMode = VideoRenderMode.RenderTexture;
+
+        videoPlayer.errorReceived += (VideoPlayer source, string message) =>
+        {
+            DebugMessageRelay.Instance.RelayMessage(message, DebugMessageType.Error);
+        };
+
         videoPlayer.url = videoFilePath;
 
         while (!videoPlayer.isPrepared)

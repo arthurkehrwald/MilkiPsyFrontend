@@ -51,7 +51,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private void Awake()
+    private void Start()
     {
         try
         {
