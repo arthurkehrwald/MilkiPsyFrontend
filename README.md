@@ -8,7 +8,7 @@ The app is available for Windows, Linux, HoloLens 2, and Android. Executables ca
 The frontend relies on data in a folder called 'MilkiPsyConfiguration' that must be present in the local Documents folder (Home directory on Linux). A working example can be found here. TODO: INSERT LINK
 
 ### Settings
-The file 'ServerAdress.json' in the root configuration folder defines the adress of the server the app will attempt to connect to.
+The file 'ServerAddress.json' in the root configuration folder defines the address of the server the app will attempt to connect to.
 
 | Key | Type | Meaning | Required |
 | - | - | - | - |
