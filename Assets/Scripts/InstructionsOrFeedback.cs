@@ -8,7 +8,7 @@ public enum MediaType { Unknown, Invalid, Image, Video, Audio };
 [Serializable]
 public class InstructionsOrFeedback : IParseResult
 {
-    public string mediaFileName;
+    public string mediaFilename ;
     public string text;
     public string MediaFilePath
     {
@@ -21,9 +21,9 @@ public class InstructionsOrFeedback : IParseResult
 
             mediaFilePath = MediaType switch
             {
-                MediaType.Image => Path.Combine(ConfigPaths.imageFolderPath, mediaFileName),
-                MediaType.Video => Path.Combine(ConfigPaths.videoFolderPath, mediaFileName),
-                MediaType.Audio => Path.Combine(ConfigPaths.audioFolderPath, mediaFileName),
+                MediaType.Image => Path.Combine(ConfigPaths.imageFolderPath, mediaFilename),
+                MediaType.Video => Path.Combine(ConfigPaths.videoFolderPath, mediaFilename),
+                MediaType.Audio => Path.Combine(ConfigPaths.audioFolderPath, mediaFilename),
                 _ => null,
             };
 
@@ -40,7 +40,7 @@ public class InstructionsOrFeedback : IParseResult
                 return mediaType;
             }
 
-            string fileExtension = Path.GetExtension(mediaFileName);
+            string fileExtension = Path.GetExtension(mediaFilename);
 
             if (fileExtension == null)
             {
@@ -99,22 +99,22 @@ public class InstructionsOrFeedback : IParseResult
 
     public bool IsValid()
     {
-        bool isMediaFileNameValid = false;
-        bool isMediaFileNameSpecified = !string.IsNullOrWhiteSpace(mediaFileName);
+        bool isMediaFilenameValid = false;
+        bool isMediaFilenameSpecified = !string.IsNullOrWhiteSpace(mediaFilename);
 
-        if (isMediaFileNameSpecified)
+        if (isMediaFilenameSpecified)
         {
             FileInfo mediaFileInfo = new FileInfo(MediaFilePath);
-            isMediaFileNameValid = mediaFileInfo.Exists && MediaType != MediaType.Invalid;
+            isMediaFilenameValid = mediaFileInfo.Exists && MediaType != MediaType.Invalid;
         }
 
-        if (isMediaFileNameSpecified && !isMediaFileNameValid)
+        if (isMediaFilenameSpecified && !isMediaFilenameValid)
         {
             return false;
         }
 
         bool isTextValid = !string.IsNullOrWhiteSpace(text);
 
-        return isMediaFileNameValid || isTextValid;
+        return isMediaFilenameValid || isTextValid;
     }
 }
