@@ -19,12 +19,28 @@ The file 'ServerAddress.json' in the root configuration folder defines the addre
 | ip | String | The app will attempt to connect to a backend running on this address. | Yes |
 | port | Int | The app will attempt to connect on this port. | Yes |
 
+Example:
+```
+{
+    "ip": "127.0.0.1",
+    "port":  13000
+}
+```
+
 The file 'LoggingSettings.json' in the root configuration folder can be used to make troubleshooting easier by displaying technical information in the user interface.
 
 | Key | Type | Meaning | Required |
 | - | - | - | - |
 | logDebugInfo | Boolean | Whether or not to display technical information such as when outdated server messages are ignored | Yes |
 | logDebugError | Boolean | Whether or not to display messages related to errors such as file access or parsing errors | Yes |
+
+Example:
+```
+{
+    "logDebugInfo": true,
+    "logDebugErrors": true
+}
+```
 
 ### Programs
 Each program is defined in its own .json file in 'MilkiPsyConfiguration/Programs'.
@@ -35,6 +51,20 @@ Each program is defined in its own .json file in 'MilkiPsyConfiguration/Programs
 | estimatedDurationMinutes | Float | The duration of the program as displayed in the program selection menu | No |
 | stageFilenames | String Array | A list of .json filenames (including the '.json' at the end). Each entry refers to a stage configuration file. The files will be parsed into stages and added to the program. | Yes |
 
+Example:
+```
+{
+    "displayName": "Example Program",
+    "estimatedDurationMinutes":  35.0,
+    "stageFilenames": 
+    [
+        "example_stage_1.json",
+        "example_stage_2.json",
+        "example_stage_3.json"
+    ]
+}
+```
+
 ### Stages
 Each stage is defined in its own .json file in 'MilkiPsyConfiguration/Stages'. One stage definition can be used in multiple different programs or even multiple times in the same program.
 
@@ -44,6 +74,14 @@ Each stage is defined in its own .json file in 'MilkiPsyConfiguration/Stages'. O
 | instructionsFilename | String | The name of the .json file (including the '.json' at the end) that defines the detailed instructions to be displayed while the stage is running. | No |
 | durationMinutes | Float | A timer will count down from the specified time. Once it runs out, the stage will automatically be completed. If not defined or zero, the timer will count up instead and the stage will not end automatically. | No |
 
+Example:
+```
+{
+    "displayName": "Example Stage 1",
+    "instructionsFilename": "example_instructions_1.json"
+}
+```
+
 ### Instructions and Feedback
 Each instruction is defined in its own .json file in 'MilkiPsyConfiguration/InstructionsAndFeedback'. The same applies to feedback that can be displayed as a response to a message from the server. One instructions definition can be used in multiple different stages.
 
@@ -51,6 +89,14 @@ Each instruction is defined in its own .json file in 'MilkiPsyConfiguration/Inst
 | - | - |- | - |
 | text | String | The text to display to the user. May contain [markup syntax](http://digitalnativestudios.com/textmeshpro/docs/rich-text/). | Yes, unless 'media' is defined
 | mediaFilename | String | The name of the media file to display, including the file ending. | Yes, unless 'text' is defined |
+
+Example:
+```
+{
+    "text": "<size=120%>Heading<size=100%><br><br>Body",
+    "mediaFilename": "test_image.jpeg"
+}
+```
 
 ### Media
 
@@ -72,6 +118,14 @@ The popup messages that can be triggered by the server must be defined in .json 
 | - | - |- | - |
 | text | String | The text of the message | Yes |
 | connotation | Int | 1 = Good, 2 = Neutral, 3 = Bad. The connotation is supposed to control the background color of the message, but this is not implemented yet. | Yes |
+
+Example:
+```
+{
+    "text": "This is a popup message",
+    "connotation": 2
+}
+```
 
 ## Building
 There are no special requirements for building the app for any platform except HoloLens. To gain access to the local documents folder where the configuration files are, permission is needed. It is currently not possible to set this up in Unity, so the package manifest file must be manually edited after building. For instructions, refer to the section on 'Documents' under 'Restricted Capability List' in the [documentation](https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations "documentation"). The package file will not be overwritten on subsequent builds to the same folder, so you only need to do this the first time.
