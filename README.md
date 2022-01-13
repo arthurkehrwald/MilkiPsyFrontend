@@ -38,6 +38,7 @@ Each stage is defined in its own .json file in 'MilkiPsyConfiguration/Stages'.
 | - | - |- | - |
 | displayName | String | The name of the stage as displayed to the user. Should  tell the user what to do. | Yes|
 | instructionsFilename | String | The name of the .json file (including the '.json' at the end) that defines the detailed instructions to be displayed while the stage is running. | No |
+| durationMinutes | Float | The stage will automatically be completed if the specified time elapses. If not defined or zero, the timer will count up instead. | No |
 
 ### Instructions and Feedback
 Each instruction is defined in its own .json file in 'MilkiPsyConfiguration/InstructionsAndFeedback'. The same applies to feedback that can be displayed as a response to a message from the server.
