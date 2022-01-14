@@ -133,3 +133,5 @@ There are no special requirements for building the app for any platform except H
 ## Further Development
 
 The configuration process is very annoying. It requires perfect spelling and adherence to specific file and folder structures. It would be much more user friendly to generate the configuration files automatically using a graphical editor and load them into the frontend using an online content management system.
+
+The user interface is very dodgy on the HoloLens version because it was adapted to work in AR rather than built for it. We use MRTK to map hand gesture input to Unity's standard two dimensional UI system. This works, but it doesn't work well. It often takes two or three tries before a button press is registered. To fix this, the interface should be properly ported to AR using MRTK prefabs.
