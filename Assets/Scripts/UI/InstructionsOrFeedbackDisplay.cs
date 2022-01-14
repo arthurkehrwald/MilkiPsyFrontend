@@ -139,7 +139,7 @@ public class InstructionsOrFeedbackDisplay : MonoBehaviour
 
     private async Task DisplayVideoAsync(string videoFilePath)
     {
-#if ENABLE_WINMD_SUPPORT
+#if UNITY_WSA && !UNITY_EDITOR && ENABLE_WINMD_SUPPORT
         // On HoloLens, VideoPlayer can't read from user storage (e.g. Documents),
         // even if the appropriate capability is declared in the manifest.
         // As a workaround, copy videos to app data folder first.
