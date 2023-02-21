@@ -7,13 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Ghst_MT
+  m_Name: Shader Graphs_GhostSHDR
   m_Shader: {fileID: -6465566751694194690, guid: 4f2e0fc6635134cfcae0162eee56fbf0, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -32,11 +32,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_2176d9cb5efd47b4b5efaed5088acf7f: 6.52
+    - Vector1_2176d9cb5efd47b4b5efaed5088acf7f: 0.22
     - Vector1_5333720777f243539de0b10caff458eb: 0
-    - Vector1_8f36a703c0084d8794dca1b68649eb6d: 0.1
-    - Vector1_f0dd2cc9c82247f1943a686b9f44cfe6: 7.97
+    - Vector1_8f36a703c0084d8794dca1b68649eb6d: 0
+    - Vector1_f0dd2cc9c82247f1943a686b9f44cfe6: 1
     m_Colors:
-    - Color_b09bc89cd04948b8be0695f7691292f6: {r: 0, g: 1024, b: 0, a: 0}
-    - Color_b09bc89cd04948b8be0695f7691292f6_1: {r: 1367.1202, g: 0, b: 501.18106, a: 0}
+    - Color_b09bc89cd04948b8be0695f7691292f6: {r: 0.2871746, g: 0.2871746, b: 0.2871746, a: 0}
+    - Color_b09bc89cd04948b8be0695f7691292f6_1: {r: 0.5, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
