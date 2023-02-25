@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_HeatMapShader
-  m_Shader: {fileID: -6465566751694194690, guid: 77f4c6902ed2a0d4898ab4454a039778, type: 3}
+  m_Name: Shader Graphs_GhostShader
+  m_Shader: {fileID: -6465566751694194690, guid: a649de4e6bacfd24aa9ea8a9e1083d18, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -32,8 +32,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_1517734fd47b4aba84dcd8b85c7a394c: 0.77
+    - Vector1_1517734fd47b4aba84dcd8b85c7a394c: 1.42
+    - Vector1_4c05d4a36e614812ab81fcdfc090b591: 0.79
+    - Vector1_bb55e293667e41abb7d1305ebcee992a: -0.4
+    - Vector1_fa3fa241d0624194a08199e77bb1bb00: 1.25
     m_Colors:
-    - Color_0c686876568940399b66575ffff93993: {r: 0.03367543, g: 1, b: 0, a: 0}
-    - Color_fee1da16a47d4be69d6f602b114441ee: {r: 1, g: 0, b: 0, a: 0}
+    - Color_0c686876568940399b66575ffff93993: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 0}
+    - Color_fee1da16a47d4be69d6f602b114441ee: {r: 0.9339623, g: 0.83490044, b: 0.17181383, a: 0}
   m_BuildTextureStacks: []
